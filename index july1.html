@@ -1,0 +1,1600 @@
+<html lang="en"><head><meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Accelerated Agentic Roll Out Status</title>
+<style>
+  @import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800;900&display=swap');
+  *{box-sizing:border-box;margin:0;padding:0}
+  body{font-family:'Inter',sans-serif;background:#0a0e1a;color:#e6edf3;min-height:100vh;padding:24px}
+  a{color:inherit;text-decoration:none}
+
+  /* ── TOP HEADER ── */
+  .main-header{background:linear-gradient(135deg,#0f1b35 0%,#1a0a3d 100%);border-radius:16px;padding:28px 36px;margin-bottom:24px;border:1px solid #1e2a4a;display:flex;align-items:flex-start;justify-content:space-between}
+  .main-header h1{font-size:52px;font-weight:900;color:#fff;line-height:1.1}
+  .main-header h1 span{color:#a855f7}
+  .main-header .sub{font-size:13px;color:#8b949e;margin-top:6px}
+  .main-header .date{font-size:12px;color:#6e7681;text-align:right}
+
+  /* ── KPI BAR ── */
+  .kpi-bar{display:grid;grid-template-columns:1fr 1fr 1fr;gap:16px;margin-bottom:24px}
+  .kpi-card{background:#111827;border:1px solid #1e2a4a;border-radius:14px;padding:22px 26px;position:relative;overflow:hidden}
+  .kpi-card .decor{position:absolute;right:-20px;bottom:-20px;width:80px;height:80px;border-radius:50%;opacity:0.12}
+  .kpi-card .label{font-size:11px;font-weight:600;letter-spacing:0.08em;text-transform:uppercase;color:#8b949e;margin-bottom:10px}
+  .kpi-card .value{font-size:48px;font-weight:800;line-height:1}
+  .kpi-card .desc{font-size:12px;color:#6e7681;margin-top:6px}
+  .kpi-card .trend{display:inline-flex;align-items:center;gap:4px;font-size:13px;font-weight:600;margin-top:4px}
+
+  /* ── AOF RIBBON ── */
+  .aof-ribbon{background:#111827;border:1px solid #1e2a4a;border-radius:14px;padding:20px 24px;margin-bottom:24px;display:flex;align-items:center;gap:0}
+  .aof-label{background:#1a1040;border-radius:10px;padding:14px 18px;margin-right:20px;flex-shrink:0}
+  .aof-label p{font-size:13px;font-weight:700;color:#fff;line-height:1.3}
+  .aof-stats{display:flex;flex:1;gap:0}
+  .aof-stat{flex:1;text-align:center;padding:8px 12px;border-left:1px solid #1e2a4a}
+  .aof-stat .av{font-size:32px;font-weight:800;line-height:1;margin-bottom:4px}
+  .aof-stat .al{font-size:11px;color:#8b949e;text-transform:uppercase;letter-spacing:0.05em}
+  .aof-link{margin-left:20px;flex-shrink:0}
+  .aof-link a{background:#2d1b69;color:#c084fc;border:1px solid #4c1d95;border-radius:8px;padding:8px 14px;font-size:12px;font-weight:600;white-space:nowrap;display:flex;align-items:center;gap:5px}
+
+  /* ── SECTION CARD ── */
+  .section{background:#111827;border:1px solid #1e2a4a;border-radius:14px;padding:24px 28px;margin-bottom:20px}
+  .section-title{font-size:16px;font-weight:700;color:#fff;margin-bottom:16px;display:flex;align-items:center;gap:8px}
+  .section-title .pill{font-size:10px;font-weight:600;padding:3px 9px;border-radius:10px;background:#1e2a4a;color:#8b949e}
+
+  /* ── EXECUTIVE SUMMARY ── */
+  .exec-item{display:flex;gap:10px;margin-bottom:12px;font-size:13px;line-height:1.6;color:#c9d1d9}
+  .exec-item::before{content:"✅";flex-shrink:0;margin-top:1px}
+  .raid-title{font-size:12px;font-weight:600;color:#8b949e;text-transform:uppercase;letter-spacing:0.06em;margin:16px 0 8px}
+  .raid-item{font-size:13px;color:#c9d1d9;margin-bottom:6px;padding-left:16px;position:relative}
+  .raid-item::before{content:"";position:absolute;left:0;top:7px;width:6px;height:6px;border-radius:50%;background:#a78bfa}
+  .action-item{font-size:13px;color:#c9d1d9;margin-bottom:6px;display:flex;align-items:flex-start;gap:8px}
+  .action-item::before{content:"✓";color:#3fb950;font-weight:700;flex-shrink:0}
+
+  /* ── CLIENT SNAPSHOT ── */
+  .region-label{font-size:11px;font-weight:600;color:#8b949e;text-transform:uppercase;letter-spacing:0.06em;margin:14px 0 8px;display:flex;align-items:center;gap:6px}
+  .clients-grid{display:grid;grid-template-columns:repeat(4,1fr);gap:10px;margin-bottom:4px}
+  .client-snap{background:#0d1117;border:1px solid #21262d;border-radius:10px;padding:14px 16px;text-align:center;display:flex;flex-direction:column;align-items:center}
+  .cs-name{font-size:14px;font-weight:700;color:#fff;margin-bottom:4px}
+  .cs-pct{font-size:28px;font-weight:800;color:#a78bfa;line-height:1;margin:6px 0 2px}
+  .cs-detail{font-size:11px;color:#8b949e;margin-bottom:6px}
+  .cs-bar-bg{height:4px;background:#21262d;border-radius:2px;overflow:hidden;margin-bottom:8px;width:100%}
+  .cs-bar{height:100%;border-radius:2px;background:linear-gradient(90deg,#7c3aed,#a78bfa)}
+  .cs-badge{display:inline-block;font-size:10px;font-weight:600;padding:2px 8px;border-radius:10px;background:rgba(34,197,94,0.15);color:#4ade80}
+
+  /* ── PHASES TABLE ── */
+  .phases-table{width:100%;border-collapse:collapse;font-size:12px;margin-top:4px}
+  .phases-table th{background:#0d1117;padding:8px 10px;text-align:center;font-weight:600;color:#8b949e;border:1px solid #21262d;font-size:11px}
+  .phases-table th.phase-col{text-align:left;width:120px}
+  .phases-table td{padding:8px 10px;border:1px solid #21262d;text-align:center;font-size:12px}
+  .phases-table td.phase-name{text-align:left;font-weight:600;color:#e6edf3}
+  .pct-high{color:#4ade80;font-weight:700}
+  .pct-med{color:#fbbf24;font-weight:700}
+  .pct-low{color:#6e7681}
+
+  /* ── MILESTONES TABLE ── */
+  .ms-table{width:100%;border-collapse:collapse;font-size:11px;margin-top:4px}
+  .ms-table th{background:#0d1117;padding:7px 8px;text-align:center;font-weight:600;color:#8b949e;border:1px solid #21262d;font-size:10px;letter-spacing:0.03em}
+  .ms-table th.left{text-align:left}
+  .ms-table td{padding:7px 8px;border:1px solid #21262d;text-align:center;vertical-align:middle}
+  .ms-table td.left{text-align:left;color:#e6edf3}
+  .ms-table td.milestone-name{text-align:left;font-weight:500;color:#c9d1d9;font-size:11px}
+  .ms-table td.milestone-sub{font-size:10px;color:#6e7681}
+  .ms-table .phase-row td{background:#161b22;font-weight:700;color:#a78bfa;font-size:11px;letter-spacing:0.04em;text-transform:uppercase}
+  .ms-table .summary-row td{background:#1a2030;font-weight:700;color:#4ade80;font-size:11px}
+  .status-pill{display:inline-block;padding:2px 8px;border-radius:10px;font-size:10px;font-weight:600;white-space:nowrap}
+  .s-completed{background:rgba(34,197,94,0.18);color:#4ade80;border:1px solid transparent}
+  .s-inprog{background:rgba(34,197,94,0.06);color:#4ade80;border:1px dashed #4ade80}
+  .s-delayed{background:rgba(234,179,8,0.15);color:#e3b341;border:1px solid transparent}
+  .s-yet{background:rgba(107,114,128,0.15);color:#9ca3af;border:1px solid transparent}
+  .s-ontrack{background:rgba(34,197,94,0.18);color:#4ade80;border:1px solid transparent}
+
+  /* ── RESOURCE TABLE ── */
+  .res-table{width:100%;border-collapse:collapse;font-size:11px;margin-top:4px;table-layout:fixed}
+  .res-table th{background:#0d1117;padding:7px 8px;text-align:center;font-weight:600;color:#8b949e;border:1px solid #21262d;font-size:10px;line-height:1.3}
+  .res-table th.left{text-align:left}
+  .res-table td{padding:7px 8px;border:1px solid #21262d;font-size:10px;color:#c9d1d9;vertical-align:top;word-wrap:break-word}
+  .res-table td.left{text-align:left;font-weight:600;color:#e6edf3}
+  .neg{color:#f87171}
+  .pos{color:#4ade80}
+  .links-row{display:flex;gap:10px;margin-top:14px;flex-wrap:wrap}
+  .asset-link{background:#0d1117;border:1px solid #21262d;border-radius:8px;padding:8px 14px;font-size:12px;color:#60a5fa;display:flex;align-items:center;gap:6px}
+  .asset-link:hover{border-color:#a78bfa;color:#a78bfa}
+
+  /* ────────────────────────────────────────────
+     AGENT BUILD — OVERVIEW SECTION
+  ──────────────────────────────────────────── */
+  .agent-section-hdr{display:flex;align-items:center;justify-content:space-between;margin-bottom:18px}
+  .agent-section-hdr h2{font-size:22px;font-weight:800;color:#fff}
+  .agent-section-hdr h2 span{color:#a78bfa}
+  .agent-section-hdr .sub{font-size:12px;color:#6e7681;margin-top:3px}
+  .agent-section-hdr .badge{background:#1a1040;color:#c084fc;border:1px solid #4c1d95;border-radius:20px;padding:5px 14px;font-size:11px;font-weight:600;display:flex;align-items:center;gap:5px}
+  .agent-section-hdr .badge .dot{width:6px;height:6px;border-radius:50%;background:#a78bfa}
+
+  .ab-ribbon{background:#0d1117;border:1px solid #21262d;border-radius:12px;padding:18px 20px;margin-bottom:12px}
+  .ab-ribbon-label{font-size:10px;font-weight:600;letter-spacing:0.08em;text-transform:uppercase;color:#8b949e;margin-bottom:12px;display:flex;align-items:center;gap:6px}
+  .ab-ribbon-label::before{content:'';display:block;width:3px;height:12px;border-radius:2px}
+  .abl-purple::before{background:#a78bfa}
+  .abl-teal::before{background:#2dd4bf}
+  .abl-amber::before{background:#fbbf24}
+  .abl-blue::before{background:#60a5fa}
+
+  .ab-stats5{display:grid;grid-template-columns:repeat(5,1fr);gap:8px}
+  .ab-stats3{display:grid;grid-template-columns:repeat(3,1fr);gap:8px}
+  .ab-kpi{background:#111827;border:1px solid #21262d;border-radius:8px;padding:14px 16px;text-align:center;display:flex;flex-direction:column;align-items:center}
+  .ab-kpi .v{font-size:38px;font-weight:800;line-height:1;margin-bottom:5px}
+  .ab-kpi .l{font-size:11px;color:#8b949e;line-height:1.4}
+  .ab-kpi .b{display:inline-flex;align-items:center;gap:3px;font-size:10px;font-weight:600;padding:2px 7px;border-radius:10px;margin-top:5px}
+  .bg{background:rgba(34,197,94,0.15);color:#3fb950}
+  .ba{background:rgba(187,128,9,0.2);color:#e3b341}
+  .bp{background:rgba(139,92,246,0.2);color:#a78bfa}
+
+  .proc-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:8px}
+  .proc-c{background:#111827;border:1px solid #21262d;border-radius:8px;padding:14px 16px;border-left:3px solid transparent}
+  .proc-c .pn{font-size:12px;font-weight:700;margin-bottom:10px;display:flex;align-items:center;gap:6px}
+  .pb-bg{height:4px;background:#21262d;border-radius:2px;margin-bottom:10px;overflow:hidden}
+  .pb-fill{height:100%;border-radius:2px}
+  .proc-nums{display:flex;gap:10px}
+  .pnum .pv{font-size:24px;font-weight:700;display:block;line-height:1.1}
+  .pnum .pl{font-size:10px;color:#6e7681}
+
+  .agent-type-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:8px}
+  .at-card{background:#111827;border:1px solid #21262d;border-radius:8px;padding:14px 16px;display:flex;align-items:center;gap:12px}
+  .at-icon{width:38px;height:38px;border-radius:8px;display:flex;align-items:center;justify-content:center;flex-shrink:0;font-size:20px}
+  .at-v{font-size:36px;font-weight:800;line-height:1}
+  .at-l{font-size:11px;color:#8b949e;margin-top:2px}
+
+  .cl-grid{display:grid;grid-template-columns:repeat(4,1fr);gap:8px}
+  .cl-card{background:#111827;border:1px solid #21262d;border-radius:10px;padding:14px 16px;position:relative;transition:border-color 0.15s;cursor:default;display:flex;flex-direction:column;align-items:center;text-align:center}
+  .cl-card:hover{border-color:#a78bfa}
+  .cl-card.zero{opacity:0.5}
+  .cl-card .ci{width:34px;height:34px;border-radius:50%;display:flex;align-items:center;justify-content:center;font-size:11px;font-weight:700;margin-bottom:8px}
+  .cl-card .cn{font-size:13px;font-weight:700;color:#e6edf3;margin-bottom:2px}
+  .cl-card .cr{font-size:10px;color:#6e7681;margin-bottom:8px}
+  .cl-card .cv{font-size:38px;font-weight:800;line-height:1;margin-bottom:2px;text-align:center}
+  .cl-card .cs2{font-size:11px;color:#8b949e;text-align:center}
+
+  .tt{display:none;position:absolute;bottom:calc(100% + 8px);left:0;z-index:30;background:#1c2128;border:1px solid #373e47;border-radius:10px;padding:12px 14px;min-width:210px;max-width:260px;text-align:left}
+  .cl-card:hover .tt{display:block}
+  .tt .th{font-size:10px;font-weight:700;letter-spacing:0.06em;text-transform:uppercase;color:#8b949e;margin-bottom:8px}
+  .tt .ti{display:flex;align-items:center;gap:7px;padding:3px 0;font-size:12px;color:#e6edf3}
+  .tt .td{width:6px;height:6px;border-radius:50%;flex-shrink:0}
+  .tt .ts2{font-size:10px;font-weight:600;color:#6e7681;letter-spacing:0.05em;text-transform:uppercase;margin:7px 0 3px}
+  .tt .te{font-size:12px;color:#6e7681;font-style:italic}
+
+  /* ── EXECUTIVE SUMMARY CARDS (ls-card system) ── */
+  .ls-card{background:#111827;border:1px solid #1e2a4a;border-radius:12px;padding:22px 24px 20px;position:relative;overflow:hidden;margin-bottom:0}
+  .ls-card::before{content:'';position:absolute;top:0;left:0;right:0;height:3px;border-radius:12px 12px 0 0}
+  .ls-card.commentary::before{background:linear-gradient(90deg,#c9a84c,#ffd966)}
+  .ls-card.blockers::before{background:linear-gradient(90deg,#f87171,#cc2233)}
+  .ls-card.actions::before{background:linear-gradient(90deg,#fbbf24,#d4880a)}
+  .ls-card-title{font-size:9px;font-weight:700;letter-spacing:2px;text-transform:uppercase;color:#8b949e;margin-bottom:14px}
+  .commentary-text{font-size:13px;color:#c9d1d9;line-height:1.7}
+  .ls-items{list-style:none;display:flex;flex-direction:column;gap:10px}
+  .ls-item{display:flex;align-items:flex-start;gap:10px;font-size:13px;color:#e6edf3;line-height:1.5}
+  .ls-bullet{flex-shrink:0;width:22px;height:22px;border-radius:50%;display:flex;align-items:center;justify-content:center;font-size:11px;font-weight:800;margin-top:1px}
+  .exec-bullet{flex-shrink:0;font-size:16px;margin-top:1px;line-height:1}
+  .blockers .ls-bullet{background:rgba(248,113,113,0.15);color:#f87171}
+  .actions  .ls-bullet{background:rgba(251,191,36,0.15);color:#fbbf24}
+
+  /* ── FOOTER ── */
+  .footer{text-align:center;font-size:11px;color:#4a5568;margin-top:28px;padding-top:16px;border-top:1px solid #1e2a4a}
+  .footer-btns{display:flex;justify-content:center;gap:10px;margin-top:10px}
+  .footer-btn{background:#111827;border:1px solid #21262d;border-radius:8px;padding:8px 18px;font-size:12px;color:#8b949e;cursor:pointer;display:flex;align-items:center;gap:6px}
+  .footer-btn:hover{border-color:#a78bfa;color:#a78bfa}
+  svg.icon{width:14px;height:14px;stroke:currentColor;fill:none;stroke-width:2;stroke-linecap:round;stroke-linejoin:round;vertical-align:-2px}
+</style>
+</head>
+<body>
+<script type="application/json" id="persisted-state">{"msStatus":{"GAP||Deployment Readiness":"s-completed","Clorox||Deployment Readiness":"s-completed","Corebridge||Deployment Readiness":"s-completed","AIG||Deployment Readiness":"s-inprog","Redion||Deployment Readiness":"s-inprog","BASF-MBS||Deployment Readiness":"s-inprog","Innomotics||Deployment Readiness":"s-inprog","LVMH||Deployment Readiness":"s-yet","GAP||Integration Readiness":"s-yet","Clorox||Integration Readiness":"s-yet","Corebridge||Integration Readiness":"s-yet","AIG||Integration Readiness":"s-yet","Redion||Integration Readiness":"s-yet","BASF-MBS||Integration Readiness":"s-yet","Innomotics||Integration Readiness":"s-yet","LVMH||Integration Readiness":"s-yet","GAP||Client Confirmation":"s-completed","Clorox||Client Confirmation":"s-completed","Corebridge||Client Confirmation":"s-completed","AIG||Client Confirmation":"s-inprog","Redion||Client Confirmation":"s-delayed","BASF-MBS||Client Confirmation":"s-delayed","Innomotics||Client Confirmation":"s-delayed","LVMH||Client Confirmation":"s-yet","GAP||Agentic Framework Rollout":"s-yet","Clorox||Agentic Framework Rollout":"s-yet","Corebridge||Agentic Framework Rollout":"s-yet","AIG||Agentic Framework Rollout":"s-yet","Redion||Agentic Framework Rollout":"s-yet","BASF-MBS||Agentic Framework Rollout":"s-yet","Innomotics||Agentic Framework Rollout":"s-yet","LVMH||Agentic Framework Rollout":"s-yet","GAP||Business User Validation (UAT)":"s-yet","Clorox||Business User Validation (UAT)":"s-yet","Corebridge||Business User Validation (UAT)":"s-yet","AIG||Business User Validation (UAT)":"s-yet","Redion||Business User Validation (UAT)":"s-yet","BASF-MBS||Business User Validation (UAT)":"s-yet","Innomotics||Business User Validation (UAT)":"s-yet","LVMH||Business User Validation (UAT)":"s-yet","GAP||User Enablement":"s-yet","Clorox||User Enablement":"s-yet","Corebridge||User Enablement":"s-yet","AIG||User Enablement":"s-yet","Redion||User Enablement":"s-yet","BASF-MBS||User Enablement":"s-yet","Innomotics||User Enablement":"s-yet","LVMH||User Enablement":"s-yet","GAP||Agentic Rollout Training":"s-yet","Clorox||Agentic Rollout Training":"s-yet","Corebridge||Agentic Rollout Training":"s-yet","AIG||Agentic Rollout Training":"s-yet","Redion||Agentic Rollout Training":"s-yet","BASF-MBS||Agentic Rollout Training":"s-yet","Innomotics||Agentic Rollout Training":"s-yet","LVMH||Agentic Rollout Training":"s-yet","GAP||Technical Handover":"s-yet","Clorox||Technical Handover":"s-yet","Corebridge||Technical Handover":"s-yet","AIG||Technical Handover":"s-yet","Redion||Technical Handover":"s-yet","BASF-MBS||Technical Handover":"s-yet","Innomotics||Technical Handover":"s-yet","LVMH||Technical Handover":"s-yet","GAP||Reporting Governance":"s-yet","Clorox||Reporting Governance":"s-yet","Corebridge||Reporting Governance":"s-yet","AIG||Reporting Governance":"s-yet","Redion||Reporting Governance":"s-yet","BASF-MBS||Reporting Governance":"s-yet","Innomotics||Reporting Governance":"s-yet","LVMH||Reporting Governance":"s-yet","GAP||Value Realization":"s-yet","Clorox||Value Realization":"s-yet","Corebridge||Value Realization":"s-yet","AIG||Value Realization":"s-yet","Redion||Value Realization":"s-yet","BASF-MBS||Value Realization":"s-yet","Innomotics||Value Realization":"s-yet","LVMH||Value Realization":"s-yet"},"clients":[{"id":"gap","name":"GAP","region":"americas"},{"id":"clorox","name":"Clorox","region":"americas"},{"id":"corebridge","name":"Corebridge","region":"americas"},{"id":"aig","name":"AIG","region":"americas"},{"id":"redion","name":"Redion","region":"europe"},{"id":"basf","name":"BASF-MBS","region":"europe"},{"id":"innomotics","name":"Innomotics","region":"europe"},{"id":"lvmh","name":"LVMH","region":"europe"}],"clientDeploy":{"gap":{"count":3,"agents":[{"name":"Go NoGo","color":"#4ade80"},{"name":"Capacity","color":"#4ade80"},{"name":"Knowledge Weaver","color":"#4ade80"}],"note":""},"clorox":{"count":1,"agents":[{"name":"Go NoGo — POC (MuleSoft)","color":"#4ade80"}],"note":""},"corebridge":{"count":2,"agents":[{"name":"Shift Handover","color":"#4ade80"},{"name":"Change Verdict","color":"#4ade80"}],"note":""},"aig":{"count":0,"agents":[],"note":"Deployment readiness in progress"},"redion":{"count":0,"agents":[],"note":"Deployment readiness in progress"},"basf":{"count":0,"agents":[],"note":"Deployment readiness in progress"},"innomotics":{"count":0,"agents":[],"note":"Deployment readiness in progress"},"lvmh":{"count":0,"agents":[],"note":"Onboarding in progress"}},"clientRC":{"gap":{"since":"Aug 2023","solHC":"475.5","actualHC":"440.7","hcReduction":"34.8","reductionPct":"7.3%","solTools":"myWizard","curTools":"myWizard","footer":"","solDeploy":"$38,000","solRun":"$8,854/mo","curDeploy":"$38,000","curRun":"$8,854/mo","variance":"—","remarks":"—"},"clorox":{"since":"Apr 2024","solHC":"89.24","actualHC":"93.2","hcReduction":"-3.68","reductionPct":"-4.11%","solTools":"Xmatters, ATR, Rundeck, GenWizard, Quasar++, EventOps, UTKM","curTools":"ATR, GenWizard, Agent Manager, Quasar++, EventOps","footer":"Renewal discussion in progress. Tentative Dec'26","solDeploy":"176K","solRun":"50K","curDeploy":"139K","curRun":"5.5K","variance":"37K","remarks":"RunDeck not approved; Agent Manager install cost excluded."},"corebridge":{"since":"Apr 2024","solHC":"388","actualHC":"288","hcReduction":"100","reductionPct":"26%","solTools":"GenWizard (ATR, ATA, WFM, TA, EventOps, OpenAI, QPP), 5 GenAI use cases","curTools":"GenWizard, Agent Manager, Shift Handover, Change Verdict Mgr, 4 GenAI use cases","footer":"Contract renewed w.e.f. 1 Apr 2025","solDeploy":"$193,695","solRun":"$243,653","curDeploy":"$193,695 + $6K","curRun":"~$350,000","variance":"$106,347","remarks":"Token cost & AgenticAI deployment cost details awaiting."},"aig":{"since":"","solHC":"","actualHC":"","hcReduction":"","reductionPct":"","solTools":"","curTools":"","footer":"","solDeploy":"","solRun":"","curDeploy":"","curRun":"","variance":"","remarks":""},"redion":{"since":"Jan 2021","solHC":"99","actualHC":"114","hcReduction":"+32","reductionPct":"0%","solTools":"ATR, GenWizard","curTools":"ATR, GenWizard, BitBucket (WIP)","footer":"Renewal in progress — 40-45% reduction expected over 3 yrs","solDeploy":"NA","solRun":"42K/yr","curDeploy":"NA","curRun":"42K/yr","variance":"—","remarks":"Increase due to Vulnerability Management scope, RITM volume increase, and marginal CI growth."},"basf":{"since":"Oct 2025","solHC":"50","actualHC":"45","hcReduction":"5","reductionPct":"10%","solTools":"GenWizard, ScienceLogic, Azure","curTools":"GenWizard, ScienceLogic, Azure","footer":"","solDeploy":"NA","solRun":"NA","curDeploy":"NA","curRun":"NA","variance":"NA","remarks":"NA"},"innomotics":{"since":"Jan 2021","solHC":"99","actualHC":"114","hcReduction":"+32","reductionPct":"0%","solTools":"ATR, GenWizard","curTools":"ATR, GenWizard, BitBucket (WIP)","footer":"Renewal in progress — 40-45% reduction expected over 3 yrs","solDeploy":"NA","solRun":"42K/yr","curDeploy":"NA","curRun":"42K/yr","variance":"—","remarks":"Increase due to Vulnerability Management scope, RITM volume increase, and marginal CI growth."},"lvmh":{"since":"","solHC":"","actualHC":"","hcReduction":"","reductionPct":"","solTools":"","curTools":"","footer":"","solDeploy":"","solRun":"","curDeploy":"","curRun":"","variance":"","remarks":""}},"links":{"assetText":"Asset Inventory","assetUrl":"https://ts.accenture.com/:x:/r/sites/IIS-AcceleratedAgenticRollOut/Shared%20Documents/IIS%20-%20Accelerated%20Agentic%20Roll%20Out%20-%20Documents/Asset%20Inventory/Assets%20Inventory.xlsx?d=w68b751b3e6624c779dd0308724eee696&csf=1&web=1&e=pP7Kin","agentText":"Agent Catalogue","agentUrl":"https://ts.accenture.com/:x:/r/sites/IIS-AcceleratedAgenticRollOut/Shared%20Documents/IIS%20-%20Accelerated%20Agentic%20Roll%20Out%20-%20Documents/Agent%20Library/Agents%20Catalogue.xlsx?d=w948e48d40f0749819d3d6ce186419284&csf=1&web=1&e=Wf3NBu"},"kpiVals":["24","11","74","27","47"],"kpiLabels":["ITOM processes in scope","Process Prioritized","Agents - to be built","Agents - Ready to Deploy","Agents - build in progress"],"w1ColLabels":["Orchestrator","Super","Utility","Total","Agents - Ready to Deploy","Agents - build in progress"],"wave1":[["1","5","24","30","25","5"],["1","8","15","24","2","22"],["1","6","13","20","0","20"]],"execHtml":"<li class=\"ls-item\"><span class=\"exec-bullet\">✅</span><span>Wave 1 – Incident Management Agentic Workflow has reached an advanced readiness stage, with UAT currently in progress to validate orchestration flows, execution stability, and end-to-end operational readiness prior to production rollout.</span></li><li class=\"ls-item\"><span class=\"exec-bullet\">✅</span><span>Environment readiness reviews have been completed for GAP, Clorox, and Corebridge. However, BASF, Innomotics, AIG, and Redion require new Agent Manager deployments before onboarding can proceed.</span></li>","raidHtml":"<li class=\"ls-item\"><span class=\"ls-bullet\">D</span><span>Knowledge needs to be updated in Knowledge Manager with fully cited SOPs and Runbooks.</span></li><li class=\"ls-item\"><span class=\"ls-bullet\">D</span><span>Prerequisites and the standard template format have been shared with the delivery teams to begin the knowledge curation and standardization activities.</span></li><li class=\"ls-item\"><span class=\"ls-bullet\">D</span><span>Client approvals are required even to initiate the roll out in dev instances, which may impact and extend the overall deployment timelines.</span></li>","actionsHtml":"<li class=\"ls-item\"><span class=\"ls-bullet\">✓</span><span>Obtain client approvals to move forward with deployment.</span></li><li class=\"ls-item\"><span class=\"ls-bullet\">✓</span><span>Platform readiness activities to be completed on priority.</span></li>"}</script>
+
+<!-- ═══════════════════════════════════════════════════
+     ORIGINAL DASHBOARD — UNCHANGED
+═══════════════════════════════════════════════════ -->
+
+<!-- MAIN HEADER -->
+<div class="main-header">
+  <div style="width:100%">
+    <h1>Accelerated Agentic Program — <span>Progress</span></h1>
+    <div style="display:flex;justify-content:space-between;align-items:center;margin-top:8px">
+      <div class="sub">Status Dashboard</div>
+      <div class="date" id="hdr-date" style="font-size:12px;color:#8b949e;text-align:right;">Last updated: 6/25/2026, 6:07:02 PM</div>
+    </div>
+  </div>
+</div>
+
+<!-- AGENT BUILD — OVERVIEW -->
+<div class="section">
+  <div class="agent-section-hdr">
+    <div>
+      <h2>Agent Build — <span>Overview</span></h2>
+      <div class="sub">Agentic operating framework · Build progress — Wave 1</div>
+    </div>
+    <div class="badge" style="display:none"><div class="dot"></div> Live build view</div>
+  </div>
+
+  <!-- Ribbon 1: Framework scope -->
+  <div class="ab-ribbon">
+    <div class="ab-ribbon-label abl-purple">Agentic operating framework — scope &amp; deployment progress</div>
+    <div class="ab-stats5">
+      <div class="ab-kpi"><div class="v" id="kpi-v-0" style="color:#a78bfa">24</div><div class="l" id="kpi-l-0">ITOM processes in scope</div></div>
+      <div class="ab-kpi"><div class="v" id="kpi-v-1" style="color:#c084fc">11</div><div class="l" id="kpi-l-1">Process Prioritized</div></div>
+      <div class="ab-kpi"><div class="v" id="kpi-v-2" style="color:#7c3aed">74</div><div class="l" id="kpi-l-2">Agents - to be built</div></div>
+      <div class="ab-kpi"><div class="v" id="kpi-v-3" style="color:#4ade80">27</div><div class="l" id="kpi-l-3">Agents - Ready to Deploy</div></div>
+      <div class="ab-kpi"><div class="v" id="kpi-v-4" style="color:#e3b341">47</div><div class="l" id="kpi-l-4">Agents - build in progress</div></div>
+    </div>
+  </div>
+
+  <!-- Ribbon 2+3: Wave 1 processes + Agent architecture combined -->
+  <div class="ab-ribbon">
+    <div class="ab-ribbon-label abl-teal">Wave 1 — process &amp; agent breakdown</div>
+    <div id="wave1-ribbon" style="display:flex;flex-direction:column;gap:8px">
+
+      <div style="display:flex;align-items:center;gap:0;background:#111827;border:1px solid #a78bfa;border-radius:8px;overflow:hidden">
+        <div style="padding:12px 16px;background:rgba(167,139,250,0.1);border-right:1px solid rgba(167,139,250,0.25);min-width:200px;display:flex;align-items:center;gap:7px">
+          <svg class="icon" viewBox="0 0 24 24" style="width:13px;height:13px;color:#a78bfa;flex-shrink:0"><circle cx="12" cy="12" r="10"></circle><line x1="12" y1="8" x2="12" y2="12"></line><line x1="12" y1="16" x2="12.01" y2="16"></line></svg>
+          <span style="font-size:12px;font-weight:700;color:#a78bfa;white-space:nowrap">Incident management</span>
+        </div>
+        <div style="display:flex;flex:1;align-items:center;padding:0 8px">
+          <div style="flex:1;text-align:center;padding:12px 8px;border-right:1px solid #21262d"><div style="font-size:20px;font-weight:800;color:#a78bfa;line-height:1;outline:none;cursor:text;min-width:24px" contenteditable="true" spellcheck="false">1</div><div class="w1-col-lbl" data-col="0" style="font-size:10px;color:#8b949e;margin-top:2px">Orchestrator</div></div>
+          <div style="flex:1;text-align:center;padding:12px 8px;border-right:1px solid #21262d"><div style="font-size:20px;font-weight:800;color:#a78bfa;line-height:1;outline:none;cursor:text;min-width:24px" contenteditable="true" spellcheck="false">5</div><div class="w1-col-lbl" data-col="1" style="font-size:10px;color:#8b949e;margin-top:2px">Super</div></div>
+          <div style="flex:1;text-align:center;padding:12px 8px;border-right:1px solid #21262d"><div style="font-size:20px;font-weight:800;color:#a78bfa;line-height:1;outline:none;cursor:text;min-width:24px" contenteditable="true" spellcheck="false">24</div><div class="w1-col-lbl" data-col="2" style="font-size:10px;color:#8b949e;margin-top:2px">Utility</div></div>
+          <div style="flex:1;text-align:center;padding:12px 8px;border-right:1px solid #21262d"><div style="font-size:20px;font-weight:800;color:#e6edf3;line-height:1" id="w1-inc-total" contenteditable="true" spellcheck="false">30</div><div class="w1-col-lbl" data-col="3" style="font-size:10px;color:#8b949e;margin-top:2px">Total</div></div>
+          <div style="flex:1;text-align:center;padding:12px 8px;border-right:1px solid #21262d"><div style="font-size:20px;font-weight:800;color:#4ade80;line-height:1;outline:none;cursor:text;min-width:24px" contenteditable="true" spellcheck="false">25</div><div class="w1-col-lbl" data-col="4" style="font-size:10px;color:#8b949e;margin-top:2px">Agents - Ready to Deploy</div></div>
+          <div style="flex:1;text-align:center;padding:12px 8px"><div style="font-size:20px;font-weight:800;color:#e3b341;line-height:1;outline:none;cursor:text;min-width:24px" contenteditable="true" spellcheck="false">5</div><div class="w1-col-lbl" data-col="5" style="font-size:10px;color:#8b949e;margin-top:2px">Agents - build in progress</div></div>
+        </div>
+      </div>
+
+      <div style="display:flex;align-items:center;gap:0;background:#111827;border:1px solid #a78bfa;border-radius:8px;overflow:hidden">
+        <div style="padding:12px 16px;background:rgba(167,139,250,0.1);border-right:1px solid rgba(167,139,250,0.25);min-width:200px;display:flex;align-items:center;gap:7px">
+          <svg class="icon" viewBox="0 0 24 24" style="width:13px;height:13px;color:#a78bfa;flex-shrink:0"><polyline points="17 1 21 5 17 9"></polyline><path d="M3 11V9a4 4 0 0 1 4-4h14"></path><polyline points="7 23 3 19 7 15"></polyline><path d="M21 13v2a4 4 0 0 1-4 4H3"></path></svg>
+          <span style="font-size:12px;font-weight:700;color:#a78bfa;white-space:nowrap">Change management</span>
+        </div>
+        <div style="display:flex;flex:1;align-items:center;padding:0 8px">
+          <div style="flex:1;text-align:center;padding:12px 8px;border-right:1px solid #21262d"><div style="font-size:20px;font-weight:800;color:#a78bfa;line-height:1;outline:none;cursor:text;min-width:24px" contenteditable="true" spellcheck="false">1</div><div class="w1-col-lbl" data-col="0" style="font-size:10px;color:#8b949e;margin-top:2px">Orchestrator</div></div>
+          <div style="flex:1;text-align:center;padding:12px 8px;border-right:1px solid #21262d"><div style="font-size:20px;font-weight:800;color:#a78bfa;line-height:1;outline:none;cursor:text;min-width:24px" contenteditable="true" spellcheck="false">8</div><div class="w1-col-lbl" data-col="1" style="font-size:10px;color:#8b949e;margin-top:2px">Super</div></div>
+          <div style="flex:1;text-align:center;padding:12px 8px;border-right:1px solid #21262d"><div style="font-size:20px;font-weight:800;color:#a78bfa;line-height:1;outline:none;cursor:text;min-width:24px" contenteditable="true" spellcheck="false">15</div><div class="w1-col-lbl" data-col="2" style="font-size:10px;color:#8b949e;margin-top:2px">Utility</div></div>
+          <div style="flex:1;text-align:center;padding:12px 8px;border-right:1px solid #21262d"><div style="font-size:20px;font-weight:800;color:#e6edf3;line-height:1;outline:none;cursor:text;min-width:24px" contenteditable="true" spellcheck="false">24</div><div class="w1-col-lbl" data-col="3" style="font-size:10px;color:#8b949e;margin-top:2px">Total</div></div>
+          <div style="flex:1;text-align:center;padding:12px 8px;border-right:1px solid #21262d"><div style="font-size:20px;font-weight:800;color:#4ade80;line-height:1;outline:none;cursor:text;min-width:24px" contenteditable="true" spellcheck="false">2</div><div class="w1-col-lbl" data-col="4" style="font-size:10px;color:#8b949e;margin-top:2px">Agents - Ready to Deploy</div></div>
+          <div style="flex:1;text-align:center;padding:12px 8px"><div style="font-size:20px;font-weight:800;color:#e3b341;line-height:1;outline:none;cursor:text;min-width:24px" contenteditable="true" spellcheck="false">22</div><div class="w1-col-lbl" data-col="5" style="font-size:10px;color:#8b949e;margin-top:2px">Agents - build in progress</div></div>
+        </div>
+      </div>
+
+      <div style="display:flex;align-items:center;gap:0;background:#111827;border:1px solid #a78bfa;border-radius:8px;overflow:hidden">
+        <div style="padding:12px 16px;background:rgba(167,139,250,0.1);border-right:1px solid rgba(167,139,250,0.25);min-width:200px;display:flex;align-items:center;gap:7px">
+          <svg class="icon" viewBox="0 0 24 24" style="width:13px;height:13px;color:#a78bfa;flex-shrink:0"><path d="M4 19.5A2.5 2.5 0 0 1 6.5 17H20"></path><path d="M6.5 2H20v20H6.5A2.5 2.5 0 0 1 4 19.5v-15A2.5 2.5 0 0 1 6.5 2z"></path></svg>
+          <span style="font-size:12px;font-weight:700;color:#a78bfa;white-space:nowrap">Knowledge management</span>
+        </div>
+        <div style="display:flex;flex:1;align-items:center;padding:0 8px">
+          <div style="flex:1;text-align:center;padding:12px 8px;border-right:1px solid #21262d"><div style="font-size:20px;font-weight:800;color:#a78bfa;line-height:1;outline:none;cursor:text;min-width:24px" contenteditable="true" spellcheck="false">1</div><div class="w1-col-lbl" data-col="0" style="font-size:10px;color:#8b949e;margin-top:2px">Orchestrator</div></div>
+          <div style="flex:1;text-align:center;padding:12px 8px;border-right:1px solid #21262d"><div style="font-size:20px;font-weight:800;color:#a78bfa;line-height:1;outline:none;cursor:text;min-width:24px" contenteditable="true" spellcheck="false">6</div><div class="w1-col-lbl" data-col="1" style="font-size:10px;color:#8b949e;margin-top:2px">Super</div></div>
+          <div style="flex:1;text-align:center;padding:12px 8px;border-right:1px solid #21262d"><div style="font-size:20px;font-weight:800;color:#a78bfa;line-height:1;outline:none;cursor:text;min-width:24px" contenteditable="true" spellcheck="false">13</div><div class="w1-col-lbl" data-col="2" style="font-size:10px;color:#8b949e;margin-top:2px">Utility</div></div>
+          <div style="flex:1;text-align:center;padding:12px 8px;border-right:1px solid #21262d"><div style="font-size:20px;font-weight:800;color:#e6edf3;line-height:1;outline:none;cursor:text;min-width:24px" contenteditable="true" spellcheck="false">20</div><div class="w1-col-lbl" data-col="3" style="font-size:10px;color:#8b949e;margin-top:2px">Total</div></div>
+          <div style="flex:1;text-align:center;padding:12px 8px;border-right:1px solid #21262d"><div style="font-size:20px;font-weight:800;color:#4ade80;line-height:1;outline:none;cursor:text;min-width:24px" contenteditable="true" spellcheck="false">0</div><div class="w1-col-lbl" data-col="4" style="font-size:10px;color:#8b949e;margin-top:2px">Agents - Ready to Deploy</div></div>
+          <div style="flex:1;text-align:center;padding:12px 8px"><div style="font-size:20px;font-weight:800;color:#e3b341;line-height:1;outline:none;cursor:text;min-width:24px" contenteditable="true" spellcheck="false">20</div><div class="w1-col-lbl" data-col="5" style="font-size:10px;color:#8b949e;margin-top:2px">Agents - build in progress</div></div>
+        </div>
+      </div>
+
+    </div>
+  </div>
+
+
+  <!-- Ribbon 4: Client deployment -->
+  <div class="ab-ribbon" id="client-deploy-ribbon"><div class="ab-ribbon-label abl-blue">Client deployment status <span style="font-weight:400;color:#6e7681;text-transform:none;letter-spacing:0">— hover to see deployed agents</span></div><div style="margin-bottom:8px"><div style="font-size:10px;font-weight:700;letter-spacing:0.07em;text-transform:uppercase;color:#4a9eff;margin-bottom:8px;display:flex;align-items:center;gap:6px"><span>🌎</span> Americas</div><div class="cl-grid" style="margin-bottom:14px"><div class="cl-card" data-client-id="gap" data-client-name="GAP"><div style="display:flex;align-items:center;gap:10px;margin-bottom:8px"><div><div class="cn" style="color:#4a9eff">GAP</div></div></div><div class="cv" style="color:#a78bfa">3</div><div class="cs2">agents deployed</div><div class="tt"><div class="th">Deployed Agents</div><div class="ti"><div class="td" style="background:#4ade80"></div>Go NoGo</div><div class="ti"><div class="td" style="background:#4ade80"></div>Capacity</div><div class="ti"><div class="td" style="background:#4ade80"></div>Knowledge Weaver</div></div></div><div class="cl-card" data-client-id="clorox" data-client-name="Clorox"><div style="display:flex;align-items:center;gap:10px;margin-bottom:8px"><div><div class="cn" style="color:#4a9eff">Clorox</div></div></div><div class="cv" style="color:#a78bfa">1</div><div class="cs2">agents deployed</div><div class="tt"><div class="th">Deployed Agents</div><div class="ti"><div class="td" style="background:#4ade80"></div>Go NoGo — POC (MuleSoft)</div></div></div><div class="cl-card" data-client-id="corebridge" data-client-name="Corebridge"><div style="display:flex;align-items:center;gap:10px;margin-bottom:8px"><div><div class="cn" style="color:#4a9eff">Corebridge</div></div></div><div class="cv" style="color:#a78bfa">2</div><div class="cs2">agents deployed</div><div class="tt"><div class="th">Deployed Agents</div><div class="ti"><div class="td" style="background:#4ade80"></div>Shift Handover</div><div class="ti"><div class="td" style="background:#4ade80"></div>Change Verdict</div></div></div><div class="cl-card zero" data-client-id="aig" data-client-name="AIG"><div style="display:flex;align-items:center;gap:10px;margin-bottom:8px"><div><div class="cn" style="color:#4a9eff">AIG</div></div></div><div class="cv" style="color:#6e7681">0</div><div class="cs2">agents deployed</div><div class="tt"><div class="th" style="margin-top:0">Status</div><div class="te">Deployment readiness in progress</div></div></div></div><div style="font-size:10px;font-weight:700;letter-spacing:0.07em;text-transform:uppercase;color:#a855f7;margin-top:10px;margin-bottom:8px;display:flex;align-items:center;gap:6px"><span>🌍</span> Europe</div><div class="cl-grid" style="margin-bottom:14px"><div class="cl-card zero" data-client-id="redion" data-client-name="Redion"><div style="display:flex;align-items:center;gap:10px;margin-bottom:8px"><div><div class="cn" style="color:#a855f7">Redion</div></div></div><div class="cv" style="color:#6e7681">0</div><div class="cs2">agents deployed</div><div class="tt"><div class="th" style="margin-top:0">Status</div><div class="te">Deployment readiness in progress</div></div></div><div class="cl-card zero" data-client-id="basf" data-client-name="BASF-MBS"><div style="display:flex;align-items:center;gap:10px;margin-bottom:8px"><div><div class="cn" style="color:#a855f7">BASF-MBS</div></div></div><div class="cv" style="color:#6e7681">0</div><div class="cs2">agents deployed</div><div class="tt"><div class="th" style="margin-top:0">Status</div><div class="te">Deployment readiness in progress</div></div></div><div class="cl-card zero" data-client-id="innomotics" data-client-name="Innomotics"><div style="display:flex;align-items:center;gap:10px;margin-bottom:8px"><div><div class="cn" style="color:#a855f7">Innomotics</div></div></div><div class="cv" style="color:#6e7681">0</div><div class="cs2">agents deployed</div><div class="tt"><div class="th" style="margin-top:0">Status</div><div class="te">Deployment readiness in progress</div></div></div><div class="cl-card zero" data-client-id="lvmh" data-client-name="LVMH"><div style="display:flex;align-items:center;gap:10px;margin-bottom:8px"><div><div class="cn" style="color:#a855f7">LVMH</div></div></div><div class="cv" style="color:#6e7681">0</div><div class="cs2">agents deployed</div><div class="tt"><div class="th" style="margin-top:0">Status</div><div class="te">Onboarding in progress</div></div></div></div></div></div>
+
+
+<!-- EXECUTIVE SUMMARY -->
+<div class="section">
+  <div class="section-title">Executive Summary</div>
+
+  <!-- Commentary card — gold top bar -->
+  <div class="ls-card commentary" id="d-commentary">
+    <ul class="ls-items" id="exec-display"><li class="ls-item"><span class="exec-bullet">✅</span><span>Wave 1 – Incident Management Agentic Workflow has reached an advanced readiness stage, with UAT currently in progress to validate orchestration flows, execution stability, and end-to-end operational readiness prior to production rollout.</span></li><li class="ls-item"><span class="exec-bullet">✅</span><span>Environment readiness reviews have been completed for GAP, Clorox, and Corebridge. However, BASF, Innomotics, AIG, and Redion require new Agent Manager deployments before onboarding can proceed.</span></li></ul>
+  </div>
+
+  <!-- RAID + Actions side by side -->
+  <div style="display:grid;grid-template-columns:1fr 1fr;gap:16px;margin-top:16px">
+    <!-- RAID card — red top bar -->
+    <div class="ls-card blockers" id="d-blockers">
+      <div class="ls-card-title"><span>RAID — Risks (R) · Assumptions (A) · Issues (I) · Dependencies (D)</span></div>
+      <ul class="ls-items" id="raid-display"><li class="ls-item"><span class="ls-bullet">D</span><span>Knowledge needs to be updated in Knowledge Manager with fully cited SOPs and Runbooks.</span></li><li class="ls-item"><span class="ls-bullet">D</span><span>Prerequisites and the standard template format have been shared with the delivery teams to begin the knowledge curation and standardization activities.</span></li><li class="ls-item"><span class="ls-bullet">D</span><span>Client approvals are required even to initiate the roll out in dev instances, which may impact and extend the overall deployment timelines.</span></li></ul>
+    </div>
+    <!-- Actions card — amber top bar -->
+    <div class="ls-card actions" id="d-actions">
+      <div class="ls-card-title"><span>Recommended Actions</span></div>
+      <ul class="ls-items" id="actions-display"><li class="ls-item"><span class="ls-bullet">✓</span><span>Obtain client approvals to move forward with deployment.</span></li><li class="ls-item"><span class="ls-bullet">✓</span><span>Platform readiness activities to be completed on priority.</span></li></ul>
+    </div>
+  </div>
+</div>
+
+<!-- AGENT ROLLOUT CLIENT DEPLOYMENT STATUS -->
+<div class="section" id="agent-rollout-section">
+  <div class="agent-section-hdr">
+    <div>
+      <h2>Agent Rollout — <span>Client Deployment Status</span></h2>
+      <div class="sub" id="deployment-status-sub">Milestone tracking, client snapshot &amp; resource overview across all 8 clients</div>
+    </div>
+    <div class="badge" id="deployment-status-badge"><div class="dot" style="background:#60a5fa"></div> 8 clients &nbsp;·&nbsp; 2 regions</div>
+  </div>
+</div>
+
+<!-- CLIENT SNAPSHOT -->
+<div class="section">
+  <div class="section-title">Client Snapshot <span class="pill" id="client-snapshot-pill">8 clients</span></div>
+  <div id="client-snapshot-body"><div class="region-label" style="color:#4a9eff;background:rgba(74,158,255,0.08);border:1px solid rgba(74,158,255,0.3);border-radius:6px;padding:3px 10px;display:inline-flex;align-items:center;gap:6px;margin-bottom:10px">🌎 Americas</div><div class="clients-grid" style="margin-bottom:4px"><div class="client-snap"><div class="cs-name">GAP</div><div class="cs-pct">20%</div><div class="cs-detail">2 / 10 milestones complete</div><div class="cs-bar-bg"><div class="cs-bar" style="width:20%"></div></div><span class="cs-badge">Green</span></div><div class="client-snap"><div class="cs-name">Clorox</div><div class="cs-pct">20%</div><div class="cs-detail">2 / 10 milestones complete</div><div class="cs-bar-bg"><div class="cs-bar" style="width:20%"></div></div><span class="cs-badge">Green</span></div><div class="client-snap"><div class="cs-name">Corebridge</div><div class="cs-pct">20%</div><div class="cs-detail">2 / 10 milestones complete</div><div class="cs-bar-bg"><div class="cs-bar" style="width:20%"></div></div><span class="cs-badge">Green</span></div><div class="client-snap"><div class="cs-name">AIG</div><div class="cs-pct">10%</div><div class="cs-detail">0 / 10 completed - 2 in progress</div><div class="cs-bar-bg"><div class="cs-bar" style="width:10%"></div></div><span class="cs-badge">Green</span></div></div><div class="region-label" style="color:#a855f7;background:rgba(168,85,247,0.08);border:1px solid rgba(168,85,247,0.3);border-radius:6px;padding:3px 10px;display:inline-flex;align-items:center;gap:6px;margin-bottom:10px">🌍 Europe</div><div class="clients-grid" style="margin-bottom:4px"><div class="client-snap"><div class="cs-name">Redion</div><div class="cs-pct">8%</div><div class="cs-detail">0 / 10 completed - 2 in progress</div><div class="cs-bar-bg"><div class="cs-bar" style="width:8%"></div></div><span class="cs-badge">Green</span></div><div class="client-snap"><div class="cs-name">BASF-MBS</div><div class="cs-pct">8%</div><div class="cs-detail">0 / 10 completed - 2 in progress</div><div class="cs-bar-bg"><div class="cs-bar" style="width:8%"></div></div><span class="cs-badge">Green</span></div><div class="client-snap"><div class="cs-name">Innomotics</div><div class="cs-pct">8%</div><div class="cs-detail">0 / 10 completed - 2 in progress</div><div class="cs-bar-bg"><div class="cs-bar" style="width:8%"></div></div><span class="cs-badge">Green</span></div><div class="client-snap"><div class="cs-name">LVMH</div><div class="cs-pct">0%</div><div class="cs-detail">0 / 10 milestones complete</div><div class="cs-bar-bg"><div class="cs-bar" style="width:0%"></div></div><span class="cs-badge">Green</span></div></div></div>
+</div>
+
+<!-- MILESTONES SNAPSHOT -->
+<div class="section">
+  <div class="section-title">Milestones Snapshot <span class="pill">Phase completion status per client</span></div>
+  <div id="milestones-table-wrap"><table class="ms-table"><thead><tr><th class="left" style="width:90px">Phase</th><th class="left" style="width:200px">Milestone</th><th colspan="4" style="color:#4a9eff;background:rgba(74,158,255,0.08);border-bottom:2px solid rgba(74,158,255,0.3);letter-spacing:1.5px">🌎 Americas</th><th colspan="4" style="color:#a855f7;background:rgba(168,85,247,0.08);border-bottom:2px solid rgba(168,85,247,0.3);letter-spacing:1.5px">🌍 Europe</th></tr><tr><th></th><th></th><th style="color:#4a9eff;font-size:10px;font-weight:800;letter-spacing:1px">GAP</th><th style="color:#4a9eff;font-size:10px;font-weight:800;letter-spacing:1px">Clorox</th><th style="color:#4a9eff;font-size:10px;font-weight:800;letter-spacing:1px">Corebridge</th><th style="color:#4a9eff;font-size:10px;font-weight:800;letter-spacing:1px">AIG</th><th style="color:#a855f7;font-size:10px;font-weight:800;letter-spacing:1px">Redion</th><th style="color:#a855f7;font-size:10px;font-weight:800;letter-spacing:1px">BASF-MBS</th><th style="color:#a855f7;font-size:10px;font-weight:800;letter-spacing:1px">Innomotics</th><th style="color:#a855f7;font-size:10px;font-weight:800;letter-spacing:1px">LVMH</th></tr></thead><tbody><tr class="phase-row"><td colspan="10">Phase 1 — Pre-Implementation</td></tr><tr><td></td><td class="left"><div style="font-weight:500;color:#e6edf3;font-size:11px">Deployment Readiness</div><div style="font-size:10px;color:#6e7681">AM, ATR, EO, Rundeck/KM, GenWizard</div></td><td><span class="status-pill s-completed">Completed</span></td><td><span class="status-pill s-completed">Completed</span></td><td><span class="status-pill s-completed">Completed</span></td><td><span class="status-pill s-inprog">In Progress</span></td><td><span class="status-pill s-inprog">In Progress</span></td><td><span class="status-pill s-inprog">In Progress</span></td><td><span class="status-pill s-inprog">In Progress</span></td><td><span class="status-pill s-yet">Yet to Start</span></td></tr><tr><td></td><td class="left"><div style="font-weight:500;color:#e6edf3;font-size:11px">Integration Readiness</div><div style="font-size:10px;color:#6e7681">APIs, connectors &amp; data flow</div></td><td><span class="status-pill s-yet">Yet to Start</span></td><td><span class="status-pill s-yet">Yet to Start</span></td><td><span class="status-pill s-yet">Yet to Start</span></td><td><span class="status-pill s-yet">Yet to Start</span></td><td><span class="status-pill s-yet">Yet to Start</span></td><td><span class="status-pill s-yet">Yet to Start</span></td><td><span class="status-pill s-yet">Yet to Start</span></td><td><span class="status-pill s-yet">Yet to Start</span></td></tr><tr><td></td><td class="left"><div style="font-weight:500;color:#e6edf3;font-size:11px">Client Confirmation</div><div style="font-size:10px;color:#6e7681">Scope &amp; acceptance sign-off</div></td><td><span class="status-pill s-completed">Completed</span></td><td><span class="status-pill s-completed">Completed</span></td><td><span class="status-pill s-completed">Completed</span></td><td><span class="status-pill s-inprog">In Progress</span></td><td><span class="status-pill s-delayed">In Prog-Delayed</span></td><td><span class="status-pill s-delayed">In Prog-Delayed</span></td><td><span class="status-pill s-delayed">In Prog-Delayed</span></td><td><span class="status-pill s-yet">Yet to Start</span></td></tr><tr><td></td><td class="left"><div style="font-weight:500;color:#e6edf3;font-size:11px">Agentic Framework Rollout</div><div style="font-size:10px;color:#6e7681">Genwizard deployment</div></td><td><span class="status-pill s-yet">Yet to Start</span></td><td><span class="status-pill s-yet">Yet to Start</span></td><td><span class="status-pill s-yet">Yet to Start</span></td><td><span class="status-pill s-yet">Yet to Start</span></td><td><span class="status-pill s-yet">Yet to Start</span></td><td><span class="status-pill s-yet">Yet to Start</span></td><td><span class="status-pill s-yet">Yet to Start</span></td><td><span class="status-pill s-yet">Yet to Start</span></td></tr><tr class="phase-row"><td colspan="10">Phase 2 — Deployment</td></tr><tr><td></td><td class="left"><div style="font-weight:500;color:#e6edf3;font-size:11px">Business User Validation (UAT)</div><div style="font-size:10px;color:#6e7681">UAT sign-off &amp; feedback</div></td><td><span class="status-pill s-yet">Yet to Start</span></td><td><span class="status-pill s-yet">Yet to Start</span></td><td><span class="status-pill s-yet">Yet to Start</span></td><td><span class="status-pill s-yet">Yet to Start</span></td><td><span class="status-pill s-yet">Yet to Start</span></td><td><span class="status-pill s-yet">Yet to Start</span></td><td><span class="status-pill s-yet">Yet to Start</span></td><td><span class="status-pill s-yet">Yet to Start</span></td></tr><tr><td></td><td class="left"><div style="font-weight:500;color:#e6edf3;font-size:11px">User Enablement</div><div style="font-size:10px;color:#6e7681">Onboarding &amp; access setup</div></td><td><span class="status-pill s-yet">Yet to Start</span></td><td><span class="status-pill s-yet">Yet to Start</span></td><td><span class="status-pill s-yet">Yet to Start</span></td><td><span class="status-pill s-yet">Yet to Start</span></td><td><span class="status-pill s-yet">Yet to Start</span></td><td><span class="status-pill s-yet">Yet to Start</span></td><td><span class="status-pill s-yet">Yet to Start</span></td><td><span class="status-pill s-yet">Yet to Start</span></td></tr><tr><td></td><td class="left"><div style="font-weight:500;color:#e6edf3;font-size:11px">Agentic Rollout Training</div><div style="font-size:10px;color:#6e7681">Live training sessions</div></td><td><span class="status-pill s-yet">Yet to Start</span></td><td><span class="status-pill s-yet">Yet to Start</span></td><td><span class="status-pill s-yet">Yet to Start</span></td><td><span class="status-pill s-yet">Yet to Start</span></td><td><span class="status-pill s-yet">Yet to Start</span></td><td><span class="status-pill s-yet">Yet to Start</span></td><td><span class="status-pill s-yet">Yet to Start</span></td><td><span class="status-pill s-yet">Yet to Start</span></td></tr><tr class="phase-row"><td colspan="10">Phase 3 — Transition</td></tr><tr><td></td><td class="left"><div style="font-weight:500;color:#e6edf3;font-size:11px">Technical Handover</div><div style="font-size:10px;color:#6e7681">Docs, runbooks &amp; support</div></td><td><span class="status-pill s-yet">Yet to Start</span></td><td><span class="status-pill s-yet">Yet to Start</span></td><td><span class="status-pill s-yet">Yet to Start</span></td><td><span class="status-pill s-yet">Yet to Start</span></td><td><span class="status-pill s-yet">Yet to Start</span></td><td><span class="status-pill s-yet">Yet to Start</span></td><td><span class="status-pill s-yet">Yet to Start</span></td><td><span class="status-pill s-yet">Yet to Start</span></td></tr><tr><td></td><td class="left"><div style="font-weight:500;color:#e6edf3;font-size:11px">Reporting Governance</div><div style="font-size:10px;color:#6e7681">Dashboards &amp; review cadence</div></td><td><span class="status-pill s-yet">Yet to Start</span></td><td><span class="status-pill s-yet">Yet to Start</span></td><td><span class="status-pill s-yet">Yet to Start</span></td><td><span class="status-pill s-yet">Yet to Start</span></td><td><span class="status-pill s-yet">Yet to Start</span></td><td><span class="status-pill s-yet">Yet to Start</span></td><td><span class="status-pill s-yet">Yet to Start</span></td><td><span class="status-pill s-yet">Yet to Start</span></td></tr><tr><td></td><td class="left"><div style="font-weight:500;color:#e6edf3;font-size:11px">Value Realization</div><div style="font-size:10px;color:#6e7681">ROI tracking &amp; outcomes</div></td><td><span class="status-pill s-yet">Yet to Start</span></td><td><span class="status-pill s-yet">Yet to Start</span></td><td><span class="status-pill s-yet">Yet to Start</span></td><td><span class="status-pill s-yet">Yet to Start</span></td><td><span class="status-pill s-yet">Yet to Start</span></td><td><span class="status-pill s-yet">Yet to Start</span></td><td><span class="status-pill s-yet">Yet to Start</span></td><td><span class="status-pill s-yet">Yet to Start</span></td></tr><tr class="summary-row"><td colspan="2" class="left" style="color:#4ade80">Summary — Overall Status</td><td><span class="status-pill s-ontrack">On Track</span></td><td><span class="status-pill s-ontrack">On Track</span></td><td><span class="status-pill s-ontrack">On Track</span></td><td><span class="status-pill s-ontrack">On Track</span></td><td><span class="status-pill s-ontrack">On Track</span></td><td><span class="status-pill s-ontrack">On Track</span></td><td><span class="status-pill s-ontrack">On Track</span></td><td><span class="status-pill s-ontrack">On Track</span></td></tr></tbody></table></div>
+</div>
+
+<!-- RESOURCE, COST & TOOLS -->
+<div class="section">
+  <div class="section-title">Resource, Cost &amp; Tools Overview</div>
+  <style>
+    .rc-grid{display:grid;grid-template-columns:repeat(4,1fr);gap:10px;margin-bottom:10px}
+    .rc-card{background:#0d1117;border:1px solid #21262d;border-radius:10px;overflow:hidden;cursor:pointer;transition:border-color 0.15s}
+    .rc-card:hover{border-color:#a78bfa}
+    .rc-card.empty{opacity:0.4;cursor:default}
+    .rc-card.empty:hover{border-color:#21262d}
+    .rc-hdr{padding:12px 14px;background:#111827;border-bottom:1px solid #21262d;display:flex;justify-content:space-between;align-items:center}
+    .rc-name{font-size:13px;font-weight:700;color:#e6edf3}
+    .rc-start{font-size:10px;color:#6e7681}
+    .rc-body{padding:12px 14px;display:grid;grid-template-columns:1fr 1fr;gap:8px}
+    .rc-metric{background:#161b22;border-radius:6px;padding:8px 10px}
+    .rc-metric .rm-val{font-size:16px;font-weight:700;line-height:1;margin-bottom:3px}
+    .rc-metric .rm-lbl{font-size:10px;color:#6e7681}
+    .rc-tools{padding:0 14px 12px;display:grid;grid-template-columns:1fr 1fr;gap:6px}
+    .rc-tool-box{background:#161b22;border-radius:6px;padding:8px 10px}
+    .rc-tool-box .rtb-lbl{font-size:9px;font-weight:600;text-transform:uppercase;letter-spacing:.05em;color:#6e7681;margin-bottom:4px}
+    .rc-tool-box .rtb-val{font-size:11px;color:#c9d1d9;line-height:1.4}
+    .rc-footer{padding:8px 14px;border-top:1px solid #21262d;font-size:11px;color:#8b949e;font-style:italic}
+    .rc-expand{background:#111827;border:1px solid #a78bfa;border-radius:10px;padding:16px;margin-bottom:10px;display:none}
+    .rc-expand-grid{display:grid;grid-template-columns:repeat(4,1fr);gap:10px;margin-bottom:12px}
+    .rc-expand-metric{background:#0d1117;border-radius:8px;padding:10px 14px}
+    .rc-expand-metric .ev{font-size:20px;font-weight:800;line-height:1;margin-bottom:4px}
+    .rc-expand-metric .el{font-size:10px;color:#6e7681}
+  </style>
+  <div id="resource-section-body"><div style="font-size:10px;font-weight:700;letter-spacing:.1em;text-transform:uppercase;color:#4a9eff;margin-bottom:8px;display:flex;align-items:center;gap:6px"><span>🌎</span> Americas</div><div class="rc-grid" style="margin-bottom:10px"><div class="rc-card" id="rc-gap-card" data-client-id="gap" data-client-name="GAP" onclick="toggleRC('gap')" style="cursor:pointer"><div class="rc-hdr"><span class="rc-name" style="color:#4a9eff">GAP</span><span class="rc-start">Since Aug 2023</span></div><div class="rc-body"><div class="rc-metric"><div class="rm-val" style="color:#a78bfa">475.5</div><div class="rm-lbl">Sol. HC Y1M1</div></div><div class="rc-metric"><div class="rm-val" style="color:#e6edf3">440.7</div><div class="rm-lbl">Actual HC</div></div><div class="rc-metric"><div class="rm-val" style="color:#e6edf3">34.8</div><div class="rm-lbl">HC Reduction</div></div><div class="rc-metric"><div class="rm-val" style="color:#e6edf3">7.3%</div><div class="rm-lbl">Reduction %</div></div></div><div class="rc-tools"><div class="rc-tool-box"><div class="rtb-lbl">Solutioned tools</div><div class="rtb-val">myWizard</div></div><div class="rc-tool-box"><div class="rtb-lbl">Current tools</div><div class="rtb-val">myWizard</div></div></div></div><div class="rc-card" id="rc-clorox-card" data-client-id="clorox" data-client-name="Clorox" onclick="toggleRC('clorox')" style="cursor:pointer"><div class="rc-hdr"><span class="rc-name" style="color:#4a9eff">Clorox</span><span class="rc-start">Since Apr 2024</span></div><div class="rc-body"><div class="rc-metric"><div class="rm-val" style="color:#a78bfa">89.24</div><div class="rm-lbl">Sol. HC Y1M1</div></div><div class="rc-metric"><div class="rm-val" style="color:#e6edf3">93.2</div><div class="rm-lbl">Actual HC</div></div><div class="rc-metric"><div class="rm-val" style="color:#e6edf3">-3.68</div><div class="rm-lbl">HC Reduction</div></div><div class="rc-metric"><div class="rm-val" style="color:#e6edf3">-4.11%</div><div class="rm-lbl">Reduction %</div></div></div><div class="rc-tools"><div class="rc-tool-box"><div class="rtb-lbl">Solutioned tools</div><div class="rtb-val">Xmatters, ATR, Rundeck, GenWizard, Quasar++, EventOps, UTKM</div></div><div class="rc-tool-box"><div class="rtb-lbl">Current tools</div><div class="rtb-val">ATR, GenWizard, Agent Manager, Quasar++, EventOps</div></div></div><div class="rc-footer">Renewal discussion in progress. Tentative Dec'26</div></div><div class="rc-card" id="rc-corebridge-card" data-client-id="corebridge" data-client-name="Corebridge" onclick="toggleRC('corebridge')" style="cursor:pointer"><div class="rc-hdr"><span class="rc-name" style="color:#4a9eff">Corebridge</span><span class="rc-start">Since Apr 2024</span></div><div class="rc-body"><div class="rc-metric"><div class="rm-val" style="color:#a78bfa">388</div><div class="rm-lbl">Sol. HC Y1M1</div></div><div class="rc-metric"><div class="rm-val" style="color:#e6edf3">288</div><div class="rm-lbl">Actual HC</div></div><div class="rc-metric"><div class="rm-val" style="color:#e6edf3">100</div><div class="rm-lbl">HC Reduction</div></div><div class="rc-metric"><div class="rm-val" style="color:#e6edf3">26%</div><div class="rm-lbl">Reduction %</div></div></div><div class="rc-tools"><div class="rc-tool-box"><div class="rtb-lbl">Solutioned tools</div><div class="rtb-val">GenWizard (ATR, ATA, WFM, TA, EventOps, OpenAI, QPP), 5 GenAI use cases</div></div><div class="rc-tool-box"><div class="rtb-lbl">Current tools</div><div class="rtb-val">GenWizard, Agent Manager, Shift Handover, Change Verdict Mgr, 4 GenAI use cases</div></div></div><div class="rc-footer">Contract renewed w.e.f. 1 Apr 2025</div></div><div class="rc-card empty" id="rc-aig-card" data-client-id="aig" data-client-name="AIG"><div class="rc-hdr"><span class="rc-name" style="color:#4a9eff">AIG</span><span class="rc-start">—</span></div><div style="padding:20px 14px;text-align:center;font-size:11px;color:#6e7681">Data pending</div></div></div><div class="rc-expand" id="rc-gap-detail"><div style="font-size:12px;font-weight:700;color:#a78bfa;margin-bottom:12px">GAP — Cost Details</div><div class="rc-expand-grid"><div class="rc-expand-metric"><div class="ev" style="color:#e6edf3">$38,000</div><div class="el">Sol. Deploy Cost</div></div><div class="rc-expand-metric"><div class="ev" style="color:#e6edf3">$8,854/mo</div><div class="el">Sol. Run Cost</div></div><div class="rc-expand-metric"><div class="ev" style="color:#e6edf3">$38,000</div><div class="el">Cur. Deploy Cost</div></div><div class="rc-expand-metric"><div class="ev" style="color:#e6edf3">$8,854/mo</div><div class="el">Cur. Run Cost</div></div></div></div><div class="rc-expand" id="rc-clorox-detail"><div style="font-size:12px;font-weight:700;color:#a78bfa;margin-bottom:12px">Clorox — Cost Details</div><div class="rc-expand-grid"><div class="rc-expand-metric"><div class="ev" style="color:#e6edf3">176K</div><div class="el">Sol. Deploy Cost</div></div><div class="rc-expand-metric"><div class="ev" style="color:#e6edf3">50K</div><div class="el">Sol. Run Cost</div></div><div class="rc-expand-metric"><div class="ev" style="color:#e6edf3">139K</div><div class="el">Cur. Deploy Cost</div></div><div class="rc-expand-metric"><div class="ev" style="color:#e6edf3">5.5K</div><div class="el">Cur. Run Cost</div></div><div class="rc-expand-metric" style="grid-column:span 2"><div class="ev" style="color:#4ade80">37K</div><div class="el">Cost Variance</div></div><div class="rc-expand-metric" style="grid-column:span 2"><div class="ev" style="color:#8b949e;font-size:12px;font-weight:400">RunDeck not approved; Agent Manager install cost excluded.</div><div class="el">Remarks</div></div></div></div><div class="rc-expand" id="rc-corebridge-detail"><div style="font-size:12px;font-weight:700;color:#a78bfa;margin-bottom:12px">Corebridge — Cost Details</div><div class="rc-expand-grid"><div class="rc-expand-metric"><div class="ev" style="color:#e6edf3">$193,695</div><div class="el">Sol. Deploy Cost</div></div><div class="rc-expand-metric"><div class="ev" style="color:#e6edf3">$243,653</div><div class="el">Sol. Run Cost</div></div><div class="rc-expand-metric"><div class="ev" style="color:#e6edf3">$193,695 + $6K</div><div class="el">Cur. Deploy Cost</div></div><div class="rc-expand-metric"><div class="ev" style="color:#e6edf3">~$350,000</div><div class="el">Cur. Run Cost</div></div><div class="rc-expand-metric" style="grid-column:span 2"><div class="ev" style="color:#4ade80">$106,347</div><div class="el">Cost Variance</div></div><div class="rc-expand-metric" style="grid-column:span 2"><div class="ev" style="color:#8b949e;font-size:12px;font-weight:400">Token cost &amp; AgenticAI deployment cost details awaiting.</div><div class="el">Remarks</div></div></div></div><div style="font-size:10px;font-weight:700;letter-spacing:.1em;text-transform:uppercase;color:#a855f7;margin-bottom:8px;display:flex;align-items:center;gap:6px"><span>🌍</span> Europe</div><div class="rc-grid" style="margin-bottom:10px"><div class="rc-card" id="rc-redion-card" data-client-id="redion" data-client-name="Redion" onclick="toggleRC('redion')" style="cursor:pointer"><div class="rc-hdr"><span class="rc-name" style="color:#a855f7">Redion</span><span class="rc-start">Since Jan 2021</span></div><div class="rc-body"><div class="rc-metric"><div class="rm-val" style="color:#a78bfa">99</div><div class="rm-lbl">Sol. HC Y1M1</div></div><div class="rc-metric"><div class="rm-val" style="color:#e6edf3">114</div><div class="rm-lbl">Actual HC</div></div><div class="rc-metric"><div class="rm-val" style="color:#e6edf3">+32</div><div class="rm-lbl">HC Reduction</div></div><div class="rc-metric"><div class="rm-val" style="color:#e6edf3">0%</div><div class="rm-lbl">Reduction %</div></div></div><div class="rc-tools"><div class="rc-tool-box"><div class="rtb-lbl">Solutioned tools</div><div class="rtb-val">ATR, GenWizard</div></div><div class="rc-tool-box"><div class="rtb-lbl">Current tools</div><div class="rtb-val">ATR, GenWizard, BitBucket (WIP)</div></div></div><div class="rc-footer">Renewal in progress — 40-45% reduction expected over 3 yrs</div></div><div class="rc-card" id="rc-basf-card" data-client-id="basf" data-client-name="BASF-MBS" onclick="toggleRC('basf')" style="cursor:pointer"><div class="rc-hdr"><span class="rc-name" style="color:#a855f7">BASF-MBS</span><span class="rc-start">Since Oct 2025</span></div><div class="rc-body"><div class="rc-metric"><div class="rm-val" style="color:#a78bfa">50</div><div class="rm-lbl">Sol. HC Y1M1</div></div><div class="rc-metric"><div class="rm-val" style="color:#e6edf3">45</div><div class="rm-lbl">Actual HC</div></div><div class="rc-metric"><div class="rm-val" style="color:#e6edf3">5</div><div class="rm-lbl">HC Reduction</div></div><div class="rc-metric"><div class="rm-val" style="color:#e6edf3">10%</div><div class="rm-lbl">Reduction %</div></div></div><div class="rc-tools"><div class="rc-tool-box"><div class="rtb-lbl">Solutioned tools</div><div class="rtb-val">GenWizard, ScienceLogic, Azure</div></div><div class="rc-tool-box"><div class="rtb-lbl">Current tools</div><div class="rtb-val">GenWizard, ScienceLogic, Azure</div></div></div></div><div class="rc-card" id="rc-innomotics-card" data-client-id="innomotics" data-client-name="Innomotics" onclick="toggleRC('innomotics')" style="cursor:pointer"><div class="rc-hdr"><span class="rc-name" style="color:#a855f7">Innomotics</span><span class="rc-start">Since Jan 2021</span></div><div class="rc-body"><div class="rc-metric"><div class="rm-val" style="color:#a78bfa">99</div><div class="rm-lbl">Sol. HC Y1M1</div></div><div class="rc-metric"><div class="rm-val" style="color:#e6edf3">114</div><div class="rm-lbl">Actual HC</div></div><div class="rc-metric"><div class="rm-val" style="color:#e6edf3">+32</div><div class="rm-lbl">HC Reduction</div></div><div class="rc-metric"><div class="rm-val" style="color:#e6edf3">0%</div><div class="rm-lbl">Reduction %</div></div></div><div class="rc-tools"><div class="rc-tool-box"><div class="rtb-lbl">Solutioned tools</div><div class="rtb-val">ATR, GenWizard</div></div><div class="rc-tool-box"><div class="rtb-lbl">Current tools</div><div class="rtb-val">ATR, GenWizard, BitBucket (WIP)</div></div></div><div class="rc-footer">Renewal in progress — 40-45% reduction expected over 3 yrs</div></div><div class="rc-card empty" id="rc-lvmh-card" data-client-id="lvmh" data-client-name="LVMH"><div class="rc-hdr"><span class="rc-name" style="color:#a855f7">LVMH</span><span class="rc-start">—</span></div><div style="padding:20px 14px;text-align:center;font-size:11px;color:#6e7681">Data pending</div></div></div><div class="rc-expand" id="rc-redion-detail"><div style="font-size:12px;font-weight:700;color:#a78bfa;margin-bottom:12px">Redion — Cost Details</div><div class="rc-expand-grid"><div class="rc-expand-metric"><div class="ev" style="color:#e6edf3">NA</div><div class="el">Sol. Deploy Cost</div></div><div class="rc-expand-metric"><div class="ev" style="color:#e6edf3">42K/yr</div><div class="el">Sol. Run Cost</div></div><div class="rc-expand-metric"><div class="ev" style="color:#e6edf3">NA</div><div class="el">Cur. Deploy Cost</div></div><div class="rc-expand-metric"><div class="ev" style="color:#e6edf3">42K/yr</div><div class="el">Cur. Run Cost</div></div><div class="rc-expand-metric" style="grid-column:span 4"><div class="ev" style="color:#8b949e;font-size:12px;font-weight:400">Increase due to Vulnerability Management scope, RITM volume increase, and marginal CI growth.</div><div class="el">Remarks</div></div></div></div><div class="rc-expand" id="rc-basf-detail"><div style="font-size:12px;font-weight:700;color:#a78bfa;margin-bottom:12px">BASF-MBS — Cost Details</div><div class="rc-expand-grid"><div class="rc-expand-metric"><div class="ev" style="color:#e6edf3">NA</div><div class="el">Sol. Deploy Cost</div></div><div class="rc-expand-metric"><div class="ev" style="color:#e6edf3">NA</div><div class="el">Sol. Run Cost</div></div><div class="rc-expand-metric"><div class="ev" style="color:#e6edf3">NA</div><div class="el">Cur. Deploy Cost</div></div><div class="rc-expand-metric"><div class="ev" style="color:#e6edf3">NA</div><div class="el">Cur. Run Cost</div></div><div class="rc-expand-metric" style="grid-column:span 2"><div class="ev" style="color:#4ade80">NA</div><div class="el">Cost Variance</div></div><div class="rc-expand-metric" style="grid-column:span 2"><div class="ev" style="color:#8b949e;font-size:12px;font-weight:400">NA</div><div class="el">Remarks</div></div></div></div><div class="rc-expand" id="rc-innomotics-detail"><div style="font-size:12px;font-weight:700;color:#a78bfa;margin-bottom:12px">Innomotics — Cost Details</div><div class="rc-expand-grid"><div class="rc-expand-metric"><div class="ev" style="color:#e6edf3">NA</div><div class="el">Sol. Deploy Cost</div></div><div class="rc-expand-metric"><div class="ev" style="color:#e6edf3">42K/yr</div><div class="el">Sol. Run Cost</div></div><div class="rc-expand-metric"><div class="ev" style="color:#e6edf3">NA</div><div class="el">Cur. Deploy Cost</div></div><div class="rc-expand-metric"><div class="ev" style="color:#e6edf3">42K/yr</div><div class="el">Cur. Run Cost</div></div><div class="rc-expand-metric" style="grid-column:span 4"><div class="ev" style="color:#8b949e;font-size:12px;font-weight:400">Increase due to Vulnerability Management scope, RITM volume increase, and marginal CI growth.</div><div class="el">Remarks</div></div></div></div></div>
+  <div class="links-row" style="margin-top:14px"><a class="asset-link" href="https://ts.accenture.com/:x:/r/sites/IIS-AcceleratedAgenticRollOut/Shared%20Documents/IIS%20-%20Accelerated%20Agentic%20Roll%20Out%20-%20Documents/Asset%20Inventory/Assets%20Inventory.xlsx?d=w68b751b3e6624c779dd0308724eee696&amp;csf=1&amp;web=1&amp;e=pP7Kin" target="_blank"><svg class="icon" viewBox="0 0 24 24"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"></path><polyline points="14 2 14 8 20 8"></polyline></svg>Asset Inventory</a><a class="asset-link" href="https://ts.accenture.com/:x:/r/sites/IIS-AcceleratedAgenticRollOut/Shared%20Documents/IIS%20-%20Accelerated%20Agentic%20Roll%20Out%20-%20Documents/Agent%20Library/Agents%20Catalogue.xlsx?d=w948e48d40f0749819d3d6ce186419284&amp;csf=1&amp;web=1&amp;e=Wf3NBu" target="_blank"><svg class="icon" viewBox="0 0 24 24"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"></path><polyline points="14 2 14 8 20 8"></polyline></svg>Agent Catalogue</a></div>
+</div>
+
+<!-- FOOTER -->
+<div class="footer">
+  Accelerated Agentic Program — Dashboard &nbsp;·&nbsp; Internal Use Only &nbsp;·&nbsp; Confidential
+  <div class="footer-btns">
+    <button class="footer-btn" onclick="openEditor()"><svg class="icon" viewBox="0 0 24 24"><path d="M11 4H4a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2v-7"></path><path d="M18.5 2.5a2.121 2.121 0 0 1 3 3L12 15l-4 1 1-4 9.5-9.5z"></path></svg> Edit Data</button>
+    <button class="footer-btn" onclick="exportPDF()">
+      <svg class="icon" viewBox="0 0 24 24"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"></path><polyline points="7 10 12 15 17 10"></polyline><line x1="12" y1="15" x2="12" y2="3"></line></svg>
+      <span id="pdf-lbl">⬇ Download PDF</span>
+    </button>
+    <button class="footer-btn" onclick="exportHTML()">
+      <svg class="icon" viewBox="0 0 24 24"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"></path><polyline points="7 10 12 15 17 10"></polyline><line x1="12" y1="15" x2="12" y2="3"></line></svg>
+      <span id="html-lbl">⬇ Export HTML</span>
+    </button>
+  </div>
+</div>
+
+<script src="https://cdnjs.cloudflare.com/ajax/libs/html2canvas/1.4.1/html2canvas.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
+
+<script>
+function toggleRC(id) {
+  const el = document.getElementById('rc-'+id+'-detail');
+  if(!el) return;
+  const isOpen = el.style.display === 'block';
+  document.querySelectorAll('.rc-expand').forEach(e=>e.style.display='none');
+  if(!isOpen) el.style.display = 'block';
+}
+document.getElementById('hdr-date').textContent = 'Last updated: ' + new Date().toLocaleString();
+// renderAllClientSections() called after all functions are defined — see bottom of script
+
+/* ══════ EXPORT HTML with baked-in current state ══════ */
+function exportHTML() {
+  var lbl = document.getElementById('html-lbl');
+  var pdfLbl = document.getElementById('pdf-lbl');
+  // Reset BOTH labels to clean defaults BEFORE taking the outerHTML snapshot
+  if (lbl) lbl.textContent = '⬇ Export HTML';
+  if (pdfLbl) pdfLbl.textContent = '⬇ Download PDF';
+  persistState();  // bake current milestone statuses into the file so they survive export
+  try {
+    var src = document.documentElement.outerHTML;  // snapshot taken with clean labels
+    if (lbl) lbl.textContent = '⏳ Preparing…';    // show progress only after snapshot
+    var blob = new Blob([src], {type:'text/html;charset=utf-8'});
+    var url  = URL.createObjectURL(blob);
+    var a    = document.createElement('a');
+    a.href = url;
+    a.download = 'Agentic_Dashboard_' + new Date().toISOString().slice(0,10) + '.html';
+    document.body.appendChild(a); a.click();
+    document.body.removeChild(a); URL.revokeObjectURL(url);
+    if (lbl) lbl.textContent = '✓ Downloaded!';
+  } catch(e) {
+    console.error(e);
+    if (lbl) lbl.textContent = '✗ Error';
+  }
+  setTimeout(function(){ if (lbl) lbl.textContent = '⬇ Export HTML'; }, 2500);
+}
+
+/* ══════ PDF — full page capture ══════ */
+async function exportPDF() {
+  var lbl = document.getElementById('pdf-lbl');
+  var htmlLbl = document.getElementById('html-lbl');
+  // Keep BOTH labels at clean defaults on the live DOM throughout —
+  // html2canvas clones the live DOM, so anything set here ends up in the capture.
+  // We show feedback only AFTER the canvas is taken.
+  if (lbl) lbl.textContent = '⬇ Download PDF';
+  if (htmlLbl) htmlLbl.textContent = '⬇ Export HTML';
+
+  var freezeStyle = document.createElement('style');
+  freezeStyle.id = 'pdf-freeze';
+  freezeStyle.textContent = [
+    '*, *::before, *::after {',
+    '  animation: none !important;',
+    '  transition: none !important;',
+    '  animation-delay: 0s !important;',
+    '  animation-duration: 0s !important;',
+    '}',
+    'body { overflow: visible !important; }',
+    '.section { overflow: visible !important; }',
+    '.ab-ribbon { overflow: visible !important; }',
+    '.ms-table { overflow: visible !important; }',
+  ].join('\n');
+  document.head.appendChild(freezeStyle);
+
+  document.body.classList.add('pdf-capturing');
+  window.scrollTo(0, 0);
+  await new Promise(function(r){ setTimeout(r, 600); });
+
+  // Show progress indicator only AFTER the 600ms wait (canvas clone already taken by then)
+  if (lbl) lbl.textContent = '⏳ Generating…';
+
+  try {
+    var page = document.body;
+    var canvas = await html2canvas(page, {
+      scale: 2,
+      useCORS: true,
+      allowTaint: true,
+      backgroundColor: '#0a0e1a',
+      logging: false,
+      width:  page.scrollWidth,
+      height: page.scrollHeight,
+      windowWidth:  document.documentElement.scrollWidth,
+      windowHeight: page.scrollHeight,
+      onclone: function(clonedDoc) {
+        clonedDoc.body.style.overflow = 'visible';
+        clonedDoc.body.style.height = 'auto';
+        // Set clean labels on the clone too, just in case
+        var clonedPdfLbl = clonedDoc.getElementById('pdf-lbl');
+        var clonedHtmlLbl = clonedDoc.getElementById('html-lbl');
+        if (clonedPdfLbl) clonedPdfLbl.textContent = '⬇ Download PDF';
+        if (clonedHtmlLbl) clonedHtmlLbl.textContent = '⬇ Export HTML';
+      }
+    });
+
+    var jsPDF = window.jspdf.jsPDF;
+    var pdf = new jsPDF({ orientation: 'landscape', unit: 'mm', format: 'a3' });
+    var pageW = pdf.internal.pageSize.getWidth();
+    var pageH = pdf.internal.pageSize.getHeight();
+
+    var imgRatio  = pageW / canvas.width;
+    var totalImgH = canvas.height * imgRatio;
+    var pages     = Math.ceil(totalImgH / pageH);
+
+    for (var i = 0; i < pages; i++) {
+      if (i > 0) pdf.addPage();
+      var srcY   = Math.round((i * pageH) / imgRatio);
+      var sliceH = Math.min(Math.round(pageH / imgRatio), canvas.height - srcY);
+      if (sliceH <= 0) break;
+
+      var slice = document.createElement('canvas');
+      slice.width  = canvas.width;
+      slice.height = sliceH;
+      slice.getContext('2d').drawImage(canvas, 0, srcY, canvas.width, sliceH, 0, 0, canvas.width, sliceH);
+      pdf.addImage(slice.toDataURL('image/jpeg', 0.93), 'JPEG', 0, 0, pageW, sliceH * imgRatio);
+    }
+
+    pdf.save('AAI_Agentic_RollOut_Status.pdf');
+    if (lbl) lbl.textContent = '✓ Downloaded!';
+  } catch(e) {
+    console.error('PDF error:', e);
+    if (lbl) lbl.textContent = '✗ Error — retry';
+  }
+
+  document.body.classList.remove('pdf-capturing');
+  var fs = document.getElementById('pdf-freeze');
+  if (fs) fs.remove();
+  setTimeout(function(){ if (lbl) lbl.textContent = '⬇ Download PDF'; }, 3000);
+}
+
+/* ══════ CLIENT DATA STORE ══════ */
+var CLIENTS = [
+  { id:'gap',        name:'GAP',        region:'americas' },
+  { id:'clorox',     name:'Clorox',     region:'americas' },
+  { id:'corebridge', name:'Corebridge', region:'americas' },
+  { id:'aig',        name:'AIG',        region:'americas' },
+  { id:'redion',     name:'Redion',     region:'europe'   },
+  { id:'basf',        name:'BASF-MBS',   region:'europe'   },
+  { id:'innomotics', name:'Innomotics', region:'europe'   },
+  { id:'lvmh',       name:'LVMH',       region:'europe'   }
+];
+
+var REGION_EMOJI = { americas:'🌎', europe:'🌍' };
+var REGION_LABEL = { americas:'Americas', europe:'Europe' };
+var REGION_COLOR = { americas:'#4a9eff', europe:'#a855f7' };
+var REGION_BG    = { americas:'rgba(74,158,255,0.08)', europe:'rgba(168,85,247,0.08)' };
+var REGION_BORDER= { americas:'rgba(74,158,255,0.3)',  europe:'rgba(168,85,247,0.3)'  };
+
+/* ── Client Deployment data store ── */
+var CLIENT_DEPLOY = {
+  'gap':        { count:3, agents:[{name:'Go NoGo',color:'#4ade80'},{name:'Capacity',color:'#4ade80'},{name:'Knowledge Weaver',color:'#4ade80'}], note:'' },
+  'clorox':     { count:1, agents:[{name:'Go NoGo — POC (MuleSoft)',color:'#e3b341'}], note:'' },
+  'corebridge': { count:2, agents:[{name:'Shift Handover',color:'#4ade80'},{name:'Change Verdict',color:'#4ade80'}], note:'' },
+  'aig':        { count:0, agents:[], note:'Deployment readiness in progress' },
+  'redion':     { count:0, agents:[], note:'Deployment readiness in progress' },
+  'basf':       { count:0, agents:[], note:'Deployment readiness in progress' },
+  'innomotics': { count:0, agents:[], note:'Deployment readiness in progress' },
+  'lvmh':       { count:0, agents:[], note:'Onboarding in progress' }
+};
+
+/* ── Resource, Cost & Tools data store ── */
+var CLIENT_RC = {
+  'gap':        { since:'Aug 2023', solHC:'475.5', actualHC:'440.7', hcReduction:'34.8', reductionPct:'7.3%', solTools:'myWizard', curTools:'myWizard', footer:'', solDeploy:'$38,000', solRun:'$8,854/mo', curDeploy:'$38,000', curRun:'$8,854/mo', variance:'—', remarks:'—' },
+  'clorox':     { since:'Apr 2024', solHC:'89.24', actualHC:'93.2', hcReduction:'-3.68', reductionPct:'-4.11%', solTools:'Xmatters, ATR, Rundeck, GenWizard, Quasar++, EventOps, UTKM', curTools:'ATR, GenWizard, Agent Manager, Quasar++, EventOps', footer:"Renewal discussion in progress. Tentative Dec'26", solDeploy:'176K', solRun:'50K', curDeploy:'139K', curRun:'5.5K', variance:'37K', remarks:'RunDeck not approved; Agent Manager install cost excluded.' },
+  'corebridge': { since:'Apr 2024', solHC:'388', actualHC:'288', hcReduction:'100', reductionPct:'26%', solTools:'GenWizard (ATR, ATA, WFM, TA, EventOps, OpenAI, QPP), 5 GenAI use cases', curTools:'GenWizard, Agent Manager, Shift Handover, Change Verdict Mgr, 4 GenAI use cases', footer:'Contract renewed w.e.f. 1 Apr 2025', solDeploy:'$193,695', solRun:'$243,653', curDeploy:'$193,695 + $6K', curRun:'~$350,000', variance:'$106,347', remarks:'Token cost & AgenticAI deployment cost details awaiting.' },
+  'aig':        { since:'', solHC:'', actualHC:'', hcReduction:'', reductionPct:'', solTools:'', curTools:'', footer:'', solDeploy:'', solRun:'', curDeploy:'', curRun:'', variance:'', remarks:'' },
+  'redion':     { since:'Jan 2021', solHC:'99', actualHC:'114', hcReduction:'+32', reductionPct:'0%', solTools:'ATR, GenWizard', curTools:'ATR, GenWizard, BitBucket (WIP)', footer:'Renewal in progress — 40-45% reduction expected over 3 yrs', solDeploy:'NA', solRun:'42K/yr', curDeploy:'NA', curRun:'42K/yr', variance:'—', remarks:'Increase due to Vulnerability Management scope, RITM volume increase, and marginal CI growth.' },
+  'basf':       { since:'Oct 2025', solHC:'50', actualHC:'45', hcReduction:'5', reductionPct:'10%', solTools:'GenWizard, ScienceLogic, Azure', curTools:'GenWizard, ScienceLogic, Azure', footer:'', solDeploy:'NA', solRun:'NA', curDeploy:'NA', curRun:'NA', variance:'NA', remarks:'NA' },
+  'innomotics': { since:'Jan 2021', solHC:'99', actualHC:'114', hcReduction:'+32', reductionPct:'0%', solTools:'ATR, GenWizard', curTools:'ATR, GenWizard, BitBucket (WIP)', footer:'Renewal in progress — 40-45% reduction expected over 3 yrs', solDeploy:'NA', solRun:'42K/yr', curDeploy:'NA', curRun:'42K/yr', variance:'—', remarks:'Increase due to Vulnerability Management scope, RITM volume increase, and marginal CI growth.' },
+  'lvmh':       { since:'', solHC:'', actualHC:'', hcReduction:'', reductionPct:'', solTools:'', curTools:'', footer:'', solDeploy:'', solRun:'', curDeploy:'', curRun:'', variance:'', remarks:'' }
+};
+
+/* ── Client Snapshot data store (milestone-based % and detail) ── */
+var CLIENT_SNAPSHOT = {
+  'gap':        { pct:'20%', detail:'2 / 10 milestones complete',       barW:20, badge:'Green' },
+  'clorox':     { pct:'20%', detail:'2 / 10 milestones complete',       barW:20, badge:'Green' },
+  'corebridge': { pct:'20%', detail:'2 / 10 milestones complete',       barW:20, badge:'Green' },
+  'aig':        { pct:'10%', detail:'0 / 10 completed - 2 in progress', barW:10, badge:'Green' },
+  'redion':     { pct:'10%', detail:'0 / 10 completed - 2 in progress', barW:10, badge:'Green' },
+  'basf':       { pct:'10%', detail:'0 / 10 completed - 2 in progress', barW:10, badge:'Green' },
+  'innomotics': { pct:'10%', detail:'0 / 10 completed - 2 in progress', barW:10, badge:'Green' },
+  'lvmh':       { pct:'10%', detail:'0 / 10 completed - 2 in progress', barW:10, badge:'Green' }
+};
+
+/* ── Resource section links data store ── */
+var LINKS = {
+  assetText: 'Asset Inventory',
+  assetUrl:  'https://ts.accenture.com/:x:/r/sites/IIS-AcceleratedAgenticRollOut/Shared%20Documents/IIS%20-%20Accelerated%20Agentic%20Roll%20Out%20-%20Documents/Asset%20Inventory/Assets%20Inventory.xlsx?d=w68b751b3e6624c779dd0308724eee696&csf=1&web=1&e=pP7Kin',
+  agentText: 'Agent Catalogue',
+  agentUrl:  'https://ts.accenture.com/:x:/r/sites/IIS-AcceleratedAgenticRollOut/Shared%20Documents/IIS%20-%20Accelerated%20Agentic%20Roll%20Out%20-%20Documents/Agent%20Library/Agents%20Catalogue.xlsx?d=w948e48d40f0749819d3d6ce186419284&csf=1&web=1&e=Wf3NBu'
+};
+
+function renderLinks() {
+  var row = document.querySelector('.links-row');
+  if (!row) return;
+  var html = '';
+  if (LINKS.assetText) {
+    html += '<a class="asset-link" href="' + (LINKS.assetUrl || '#') + '" target="_blank">' +
+      '<svg class="icon" viewBox="0 0 24 24"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"></path><polyline points="14 2 14 8 20 8"></polyline></svg>' +
+      LINKS.assetText + '</a>';
+  }
+  if (LINKS.agentText) {
+    html += '<a class="asset-link" href="' + (LINKS.agentUrl || '#') + '" target="_blank">' +
+      '<svg class="icon" viewBox="0 0 24 24"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"></path><polyline points="14 2 14 8 20 8"></polyline></svg>' +
+      LINKS.agentText + '</a>';
+  }
+  row.innerHTML = html;
+}
+
+
+function getRegions() {
+  var seen = {};
+  var out = [];
+  CLIENTS.forEach(function(c){ if(!seen[c.region]){ seen[c.region]=1; out.push(c.region); }});
+  return out;
+}
+
+function renderAllClientSections() {
+  renderDeploymentStatusHeader();
+  renderClientDeployRibbon();
+  renderClientSnapshot();
+  renderMilestonesTable();
+  renderResourceSection();
+}
+
+/* ── 1. Agent Rollout header badge ── */
+function renderDeploymentStatusHeader() {
+  var regions = getRegions();
+  var el = document.getElementById('deployment-status-badge');
+  if (el) el.innerHTML = '<div class="dot" style="background:#60a5fa"></div> ' + CLIENTS.length + ' clients &nbsp;&#183;&nbsp; ' + regions.length + ' regions';
+  var sub = document.getElementById('deployment-status-sub');
+  if (sub) sub.textContent = 'Milestone tracking, client snapshot & resource overview across all ' + CLIENTS.length + ' clients';
+}
+
+/* ── 1b. Client Deployment Ribbon (cl-cards inside Agent Build section) ── */
+function renderClientDeployRibbon() {
+  var ribbon = document.getElementById('client-deploy-ribbon');
+  if (!ribbon) return;
+  var label = ribbon.querySelector('.ab-ribbon-label');
+  var labelHtml = label ? label.outerHTML : '<div class="ab-ribbon-label abl-blue">Client deployment status</div>';
+  var regions = getRegions();
+  var html = labelHtml + '<div style="margin-bottom:8px">';
+  regions.forEach(function(region, ri) {
+    var clients = CLIENTS.filter(function(c){ return c.region === region; });
+    var rcol = REGION_COLOR[region] || '#8b949e';
+    html += '<div style="font-size:10px;font-weight:700;letter-spacing:0.07em;text-transform:uppercase;color:'+rcol+';'+(ri>0?'margin-top:10px;':'')+'margin-bottom:8px;display:flex;align-items:center;gap:6px"><span>'+REGION_EMOJI[region]+'</span> '+REGION_LABEL[region]+'</div>';
+    html += '<div class="cl-grid" style="margin-bottom:14px">';
+    clients.forEach(function(c) {
+      var d = CLIENT_DEPLOY[c.id] || { count:0, agents:[], note:'' };
+      var ncol = REGION_COLOR[c.region] || '#e6edf3';
+      var cvColor = d.count > 0 ? '#a78bfa' : '#6e7681';
+      var cardCls = d.count > 0 ? 'cl-card' : 'cl-card zero';
+      var ttHtml = '<div class="tt">';
+      if (d.agents && d.agents.length > 0) {
+        ttHtml += '<div class="th">Deployed Agents</div>';
+        d.agents.forEach(function(a){ ttHtml += '<div class="ti"><div class="td" style="background:#4ade80"></div>'+a.name+'</div>'; });
+      }
+      if (d.note) {
+        ttHtml += '<div class="th" style="margin-top:'+(d.agents&&d.agents.length>0?'8px':'0')+'">Status</div><div class="te">'+d.note+'</div>';
+      }
+      if ((!d.agents || d.agents.length === 0) && !d.note) {
+        ttHtml += '<div class="te">No data yet</div>';
+      }
+      ttHtml += '</div>';
+      html += '<div class="'+cardCls+'" data-client-id="'+c.id+'" data-client-name="'+c.name+'">' +
+        '<div style="display:flex;align-items:center;gap:10px;margin-bottom:8px"><div><div class="cn" style="color:'+ncol+'">'+c.name+'</div></div></div>' +
+        '<div class="cv" style="color:'+cvColor+'">'+d.count+'</div><div class="cs2">agents deployed</div>' +
+        ttHtml + '</div>';
+    });
+    html += '</div>';
+  });
+  html += '</div>';
+  ribbon.innerHTML = html;
+}
+
+/* ── 2. Client Snapshot ── */
+/* ── Shared score calculator ── 
+   Weights: Completed=100, In Progress (s-inprog)=50, In-Prog Delayed (s-delayed)=25, Yet to Start=0
+   Returns per-client { score, total, pct, allComplete, badge } */
+function computeClientScores() {
+  var WEIGHT = { 's-completed':100, 's-inprog':50, 's-delayed':25, 's-yet':0, 's-ontrack':100 };
+  var scores = {};
+  CLIENTS.forEach(function(c) {
+    var totalMs     = 0;
+    var earnedWeight = 0;
+    var completedCount = 0;
+    var inProgressCount = 0;
+    var allComplete = true;
+
+    MILESTONES.forEach(function(ph) {
+      ph.rows.forEach(function(ms) {
+        var cls = MS_STATUS[c.name + '||' + ms.name] || 's-yet';
+        var w   = WEIGHT[cls] !== undefined ? WEIGHT[cls] : 0;
+        earnedWeight += w;
+        totalMs++;
+        if (cls === 's-completed') { completedCount++; }
+        else if (cls === 's-inprog' || cls === 's-delayed') { inProgressCount++; allComplete = false; }
+        else { allComplete = false; }
+      });
+    });
+
+    var totalWeight = totalMs * 100;
+    var pct = totalWeight > 0 ? Math.round((earnedWeight / totalWeight) * 100) : 0;
+
+    // Build detail text: "X / Y milestones complete" or "X / Y completed · Z in progress"
+    var detail;
+    if (inProgressCount > 0) {
+      detail = completedCount + ' / ' + totalMs + ' completed - ' + inProgressCount + ' in progress';
+    } else {
+      detail = completedCount + ' / ' + totalMs + ' milestones complete';
+    }
+
+    scores[c.id] = {
+      pct:         pct,
+      pctStr:      pct + '%',
+      allComplete: allComplete,
+      barW:        pct,
+      detail:      detail
+    };
+  });
+  return scores;
+}
+
+function renderClientSnapshot() {
+  var container = document.getElementById('client-snapshot-body');
+  if (!container) return;
+  var scores = computeClientScores();
+  var regions = getRegions();
+  var html = '';
+  regions.forEach(function(region) {
+    var clients = CLIENTS.filter(function(c){ return c.region === region; });
+    var col = REGION_COLOR[region] || '#8b949e';
+    var bg  = REGION_BG[region]    || 'transparent';
+    var bdr = REGION_BORDER[region] || 'rgba(255,255,255,0.1)';
+    html += '<div class="region-label" style="color:'+col+';background:'+bg+';border:1px solid '+bdr+';border-radius:6px;padding:3px 10px;display:inline-flex;align-items:center;gap:6px;margin-bottom:10px">'
+          + REGION_EMOJI[region] + ' ' + REGION_LABEL[region] + '</div>';
+    html += '<div class="clients-grid" style="margin-bottom:4px">';
+    clients.forEach(function(c) {
+      // pct + barW + detail computed from milestones; badge kept from CLIENT_SNAPSHOT
+      var s  = CLIENT_SNAPSHOT[c.id] || { badge:'Green' };
+      var sc = scores[c.id] || { pctStr:'0%', barW:0, detail:'No data' };
+      html += '<div class="client-snap">' +
+        '<div class="cs-name">' + c.name + '</div>' +
+        '<div class="cs-pct">' + sc.pctStr + '</div>' +
+        '<div class="cs-detail">' + sc.detail + '</div>' +
+        '<div class="cs-bar-bg"><div class="cs-bar" style="width:' + sc.barW + '%"></div></div>' +
+        '<span class="cs-badge">' + s.badge + '</span>' +
+        '</div>';
+    });
+    html += '</div>';
+  });
+  var pill = document.getElementById('client-snapshot-pill');
+  if (pill) pill.textContent = CLIENTS.length + ' clients';
+  container.innerHTML = html;
+}
+
+/* ── 3. Milestones Table — rebuild columns dynamically ── */
+var MILESTONES = [
+  { phase:'Phase 1 — Pre-Implementation', rows:[
+    { name:'Deployment Readiness',      sub:'AM, ATR, EO, Rundeck/KM, GenWizard' },
+    { name:'Integration Readiness',     sub:'APIs, connectors & data flow' },
+    { name:'Client Confirmation',       sub:'Scope & acceptance sign-off' },
+    { name:'Agentic Framework Rollout', sub:'Genwizard deployment' }
+  ]},
+  { phase:'Phase 2 — Deployment', rows:[
+    { name:'Business User Validation (UAT)', sub:'UAT sign-off & feedback' },
+    { name:'User Enablement',               sub:'Onboarding & access setup' },
+    { name:'Agentic Rollout Training',      sub:'Live training sessions' }
+  ]},
+  { phase:'Phase 3 — Transition', rows:[
+    { name:'Technical Handover',    sub:'Docs, runbooks & support' },
+    { name:'Reporting Governance',  sub:'Dashboards & review cadence' },
+    { name:'Value Realization',     sub:'ROI tracking & outcomes' }
+  ]}
+];
+
+// Preserve existing milestone statuses by name+client
+var MS_STATUS = {
+  'GAP||Deployment Readiness': 's-completed',
+  'Clorox||Deployment Readiness': 's-completed',
+  'Corebridge||Deployment Readiness': 's-completed',
+  'AIG||Deployment Readiness': 's-inprog',
+  'Redion||Deployment Readiness': 's-inprog',
+  'BASF-MBS||Deployment Readiness': 's-inprog',
+  'Innomotics||Deployment Readiness': 's-inprog',
+  'LVMH||Deployment Readiness': 's-inprog',
+  'GAP||Integration Readiness': 's-yet',
+  'Clorox||Integration Readiness': 's-yet',
+  'Corebridge||Integration Readiness': 's-yet',
+  'AIG||Integration Readiness': 's-yet',
+  'Redion||Integration Readiness': 's-yet',
+  'BASF-MBS||Integration Readiness': 's-yet',
+  'Innomotics||Integration Readiness': 's-yet',
+  'LVMH||Integration Readiness': 's-yet',
+  'GAP||Client Confirmation': 's-completed',
+  'Clorox||Client Confirmation': 's-completed',
+  'Corebridge||Client Confirmation': 's-completed',
+  'AIG||Client Confirmation': 's-delayed',
+  'Redion||Client Confirmation': 's-delayed',
+  'BASF-MBS||Client Confirmation': 's-delayed',
+  'Innomotics||Client Confirmation': 's-delayed',
+  'LVMH||Client Confirmation': 's-delayed',
+  'GAP||Agentic Framework Rollout': 's-yet',
+  'Clorox||Agentic Framework Rollout': 's-yet',
+  'Corebridge||Agentic Framework Rollout': 's-yet',
+  'AIG||Agentic Framework Rollout': 's-yet',
+  'Redion||Agentic Framework Rollout': 's-yet',
+  'BASF-MBS||Agentic Framework Rollout': 's-yet',
+  'Innomotics||Agentic Framework Rollout': 's-yet',
+  'LVMH||Agentic Framework Rollout': 's-yet',
+  'GAP||Business User Validation (UAT)': 's-yet',
+  'Clorox||Business User Validation (UAT)': 's-yet',
+  'Corebridge||Business User Validation (UAT)': 's-yet',
+  'AIG||Business User Validation (UAT)': 's-yet',
+  'Redion||Business User Validation (UAT)': 's-yet',
+  'BASF-MBS||Business User Validation (UAT)': 's-yet',
+  'Innomotics||Business User Validation (UAT)': 's-yet',
+  'LVMH||Business User Validation (UAT)': 's-yet',
+  'GAP||User Enablement': 's-yet',
+  'Clorox||User Enablement': 's-yet',
+  'Corebridge||User Enablement': 's-yet',
+  'AIG||User Enablement': 's-yet',
+  'Redion||User Enablement': 's-yet',
+  'BASF-MBS||User Enablement': 's-yet',
+  'Innomotics||User Enablement': 's-yet',
+  'LVMH||User Enablement': 's-yet',
+  'GAP||Agentic Rollout Training': 's-yet',
+  'Clorox||Agentic Rollout Training': 's-yet',
+  'Corebridge||Agentic Rollout Training': 's-yet',
+  'AIG||Agentic Rollout Training': 's-yet',
+  'Redion||Agentic Rollout Training': 's-yet',
+  'BASF-MBS||Agentic Rollout Training': 's-yet',
+  'Innomotics||Agentic Rollout Training': 's-yet',
+  'LVMH||Agentic Rollout Training': 's-yet',
+  'GAP||Technical Handover': 's-yet',
+  'Clorox||Technical Handover': 's-yet',
+  'Corebridge||Technical Handover': 's-yet',
+  'AIG||Technical Handover': 's-yet',
+  'Redion||Technical Handover': 's-yet',
+  'BASF-MBS||Technical Handover': 's-yet',
+  'Innomotics||Technical Handover': 's-yet',
+  'LVMH||Technical Handover': 's-yet',
+  'GAP||Reporting Governance': 's-yet',
+  'Clorox||Reporting Governance': 's-yet',
+  'Corebridge||Reporting Governance': 's-yet',
+  'AIG||Reporting Governance': 's-yet',
+  'Redion||Reporting Governance': 's-yet',
+  'BASF-MBS||Reporting Governance': 's-yet',
+  'Innomotics||Reporting Governance': 's-yet',
+  'LVMH||Reporting Governance': 's-yet',
+  'GAP||Value Realization': 's-yet',
+  'Clorox||Value Realization': 's-yet',
+  'Corebridge||Value Realization': 's-yet',
+  'AIG||Value Realization': 's-yet',
+  'Redion||Value Realization': 's-yet',
+  'BASF-MBS||Value Realization': 's-yet',
+  'Innomotics||Value Realization': 's-yet',
+  'LVMH||Value Realization': 's-yet'
+};
+
+/* ── Persistence: merge any saved state back into all data stores on load ── */
+function loadPersistedState() {
+  try {
+    var el = document.getElementById('persisted-state');
+    if (!el) return;
+    var data = JSON.parse(el.textContent || '{}');
+    if (!data) return;
+    if (data.msStatus)      Object.keys(data.msStatus).forEach(function(k){ MS_STATUS[k] = data.msStatus[k]; });
+    if (data.clients && data.clients.length) CLIENTS = data.clients;
+    if (data.clientDeploy)  Object.keys(data.clientDeploy).forEach(function(k){ CLIENT_DEPLOY[k] = data.clientDeploy[k]; });
+    if (data.clientRC)      Object.keys(data.clientRC).forEach(function(k){ CLIENT_RC[k] = data.clientRC[k]; });
+    if (data.links)         Object.keys(data.links).forEach(function(k){ LINKS[k] = data.links[k]; });
+    if (data.kpiVals)       window._pendingKpiVals    = data.kpiVals;
+    if (data.kpiLabels)     window._pendingKpiLabels  = data.kpiLabels;
+    if (data.w1ColLabels)   window._pendingW1ColLabels = data.w1ColLabels;
+    if (data.wave1)         window._pendingWave1      = data.wave1;
+    if (data.execHtml  !== undefined) window._pendingExecHtml    = data.execHtml;
+    if (data.raidHtml  !== undefined) window._pendingRaidHtml    = data.raidHtml;
+    if (data.actionsHtml !== undefined) window._pendingActionsHtml = data.actionsHtml;
+  } catch(e) { /* ignore */ }
+}
+
+/* ── Apply deferred DOM values after render ── */
+function applyDeferredState() {
+  if (window._pendingKpiVals) {
+    document.querySelectorAll('.ab-kpi .v').forEach(function(el,i){
+      if (window._pendingKpiVals[i] !== undefined) el.textContent = window._pendingKpiVals[i];
+    });
+    window._pendingKpiVals = null;
+  }
+  if (window._pendingKpiLabels) {
+    window._pendingKpiLabels.forEach(function(lbl,i){
+      var el = document.getElementById('kpi-l-'+i); if(el) el.textContent = lbl;
+    });
+    window._pendingKpiLabels = null;
+  }
+  if (window._pendingW1ColLabels) {
+    window._pendingW1ColLabels.forEach(function(lbl,i){
+      document.querySelectorAll('.w1-col-lbl[data-col="'+i+'"]').forEach(function(el){ el.textContent = lbl; });
+    });
+    window._pendingW1ColLabels = null;
+  }
+  if (window._pendingWave1) {
+    var cells = document.querySelectorAll('#wave1-ribbon [contenteditable]');
+    window._pendingWave1.forEach(function(rowVals,ri){
+      rowVals.forEach(function(val,ci){ var idx=ri*6+ci; if(cells[idx]) cells[idx].textContent=val; });
+    });
+    window._pendingWave1 = null;
+  }
+  if (window._pendingExecHtml !== undefined) {
+    var ed=document.getElementById('exec-display'); if(ed) ed.innerHTML=window._pendingExecHtml;
+    window._pendingExecHtml = undefined;
+  }
+  if (window._pendingRaidHtml !== undefined) {
+    var rd=document.getElementById('raid-display'); if(rd) rd.innerHTML=window._pendingRaidHtml;
+    window._pendingRaidHtml = undefined;
+  }
+  if (window._pendingActionsHtml !== undefined) {
+    var ad=document.getElementById('actions-display'); if(ad) ad.innerHTML=window._pendingActionsHtml;
+    window._pendingActionsHtml = undefined;
+  }
+}
+
+/* ── Persistence: bake ALL live state so it survives HTML export ── */
+function persistState() {
+  try {
+    var el = document.getElementById('persisted-state');
+    if (!el) return;
+    var kpiVals     = Array.from(document.querySelectorAll('.ab-kpi .v')).map(function(e){ return e.textContent.trim(); });
+    var kpiLabels   = [0,1,2,3,4].map(function(i){ var e=document.getElementById('kpi-l-'+i); return e?e.textContent.trim():''; });
+    var w1ColLabels = [0,1,2,3,4,5].map(function(i){ var e=document.querySelector('.w1-col-lbl[data-col="'+i+'"]'); return e?e.textContent.trim():''; });
+    var wave1=[]; var w1cells=document.querySelectorAll('#wave1-ribbon [contenteditable]');
+    var numRows=Math.ceil(w1cells.length/6);
+    for(var r=0;r<numRows;r++){
+      var rv=[];
+      for(var c=0;c<6;c++){ var idx=r*6+c; rv.push(idx<w1cells.length?w1cells[idx].textContent.trim():''); }
+      wave1.push(rv);
+    }
+    var execEl=document.getElementById('exec-display');
+    var raidEl=document.getElementById('raid-display');
+    var actEl =document.getElementById('actions-display');
+    el.textContent = JSON.stringify({
+      msStatus:MS_STATUS, clients:CLIENTS, clientDeploy:CLIENT_DEPLOY, clientRC:CLIENT_RC, links:LINKS,
+      kpiVals:kpiVals, kpiLabels:kpiLabels, w1ColLabels:w1ColLabels, wave1:wave1,
+      execHtml:execEl?execEl.innerHTML:'', raidHtml:raidEl?raidEl.innerHTML:'', actionsHtml:actEl?actEl.innerHTML:''
+    });
+  } catch(e) { /* ignore */ }
+}
+
+function saveMilestoneStatuses() {
+  var smRegions = getRegions();
+  var smOrdered = [];
+  smRegions.forEach(function(r){
+    CLIENTS.filter(function(c){ return c.region===r; }).forEach(function(c){ smOrdered.push(c); });
+  });
+  document.querySelectorAll('.ms-table tbody tr:not(.phase-row):not(.summary-row)').forEach(function(row){
+    var cells = row.querySelectorAll('td');
+    if (cells.length < 3) return;
+    var mname = cells[1].querySelector('div') ? cells[1].querySelector('div').textContent.trim() : '';
+    for (var i = 2; i < cells.length; i++) {
+      var sp = cells[i].querySelector('.status-pill');
+      if (!sp) continue;
+      var cname = smOrdered[i-2] ? smOrdered[i-2].name : '';
+      if (cname && mname) MS_STATUS[cname+'||'+mname] = sp.className.replace('status-pill ','').trim();
+    }
+  });
+}
+
+function renderMilestonesTable() {
+  var wrap = document.getElementById('milestones-table-wrap');
+  if (!wrap) return;
+  var scores = computeClientScores();
+  var regions = getRegions();
+  var regionGroups = regions.map(function(r){
+    return { region:r, clients: CLIENTS.filter(function(c){ return c.region===r; }) };
+  });
+  var totalCols = CLIENTS.length + 2;
+
+  var thead = '<thead>';
+  thead += '<tr><th class="left" style="width:90px">Phase</th><th class="left" style="width:200px">Milestone</th>';
+  regionGroups.forEach(function(g){
+    var col = REGION_COLOR[g.region] || '#8b949e';
+    var bg  = REGION_BG[g.region]   || 'transparent';
+    var bdr = REGION_BORDER[g.region]|| 'rgba(255,255,255,0.1)';
+    thead += '<th colspan="'+g.clients.length+'" style="color:'+col+';background:'+bg+';border-bottom:2px solid '+bdr+';letter-spacing:1.5px">'
+           + REGION_EMOJI[g.region] + ' ' + REGION_LABEL[g.region] + '</th>';
+  });
+  var orderedClients = [];
+  regionGroups.forEach(function(g){ g.clients.forEach(function(c){ orderedClients.push(c); }); });
+
+  thead += '</tr><tr><th></th><th></th>';
+  orderedClients.forEach(function(c){
+    var col = REGION_COLOR[c.region] || '#8b949e';
+    thead += '<th style="color:'+col+';font-size:10px;font-weight:800;letter-spacing:1px">' + c.name + '</th>';
+  });
+  thead += '</tr></thead>';
+
+  var tbody = '<tbody>';
+  MILESTONES.forEach(function(ph){
+    tbody += '<tr class="phase-row"><td colspan="'+totalCols+'">'+ph.phase+'</td></tr>';
+    ph.rows.forEach(function(ms){
+      tbody += '<tr><td></td><td class="left"><div style="font-weight:500;color:#e6edf3;font-size:11px">'+ms.name+'</div><div style="font-size:10px;color:#6e7681">'+ms.sub+'</div></td>';
+      orderedClients.forEach(function(c){
+        var cls   = MS_STATUS[c.name+'||'+ms.name] || 's-yet';
+        var label = cls==='s-completed' ? 'Completed' : cls==='s-inprog' ? 'In Progress' : cls==='s-delayed' ? 'In Prog-Delayed' : 'Yet to Start';
+        tbody += '<td><span class="status-pill '+cls+'">'+label+'</span></td>';
+      });
+      tbody += '</tr>';
+    });
+  });
+  tbody += '<tr class="summary-row"><td colspan="2" class="left" style="color:#4ade80">Summary — Overall Status</td>';
+  orderedClients.forEach(function(c){
+    var sc = scores[c.id] || { allComplete:false };
+    tbody += sc.allComplete ? '<td><span class="status-pill s-completed">Completed</span></td>' : '<td><span class="status-pill s-ontrack">On Track</span></td>';
+  });
+  tbody += '</tr></tbody>';
+
+  wrap.innerHTML = '<table class="ms-table">' + thead + tbody + '</table>';
+}
+
+/* ── 4. Resource Section — rebuild grids by region, preserve existing card HTML ── */
+function renderResourceSection() {
+  var wrap = document.getElementById('resource-section-body');
+  if (!wrap) return;
+  var regions = getRegions();
+  var html = '';
+  regions.forEach(function(region) {
+    var clients = CLIENTS.filter(function(c){ return c.region === region; });
+    var rcol = REGION_COLOR[region] || '#8b949e';
+    html += '<div style="font-size:10px;font-weight:700;letter-spacing:.1em;text-transform:uppercase;color:'+rcol+';margin-bottom:8px;display:flex;align-items:center;gap:6px"><span>'+REGION_EMOJI[region]+'</span> '+REGION_LABEL[region]+'</div>';
+
+    // ── Cards grid ──
+    html += '<div class="rc-grid" style="margin-bottom:10px">';
+    clients.forEach(function(c) {
+      var d = CLIENT_RC[c.id] || {};
+      var ncol = REGION_COLOR[c.region] || '#e6edf3';
+      var hasData = d.solHC || d.actualHC;
+      var cardCls = hasData ? 'rc-card' : 'rc-card empty';
+      if (hasData) {
+        html += '<div class="'+cardCls+'" id="rc-'+c.id+'-card" data-client-id="'+c.id+'" data-client-name="'+c.name+'" onclick="toggleRC(\''+c.id+'\')" style="cursor:pointer">';
+        html += '<div class="rc-hdr"><span class="rc-name" style="color:'+ncol+'">'+c.name+'</span><span class="rc-start">'+(d.since?'Since '+d.since:'')+'</span></div>';
+        html += '<div class="rc-body">';
+        html += '<div class="rc-metric"><div class="rm-val" style="color:#a78bfa">'+(d.solHC||'—')+'</div><div class="rm-lbl">Sol. HC Y1M1</div></div>';
+        html += '<div class="rc-metric"><div class="rm-val" style="color:#e6edf3">'+(d.actualHC||'—')+'</div><div class="rm-lbl">Actual HC</div></div>';
+        html += '<div class="rc-metric"><div class="rm-val" style="color:#e6edf3">'+(d.hcReduction||'—')+'</div><div class="rm-lbl">HC Reduction</div></div>';
+        html += '<div class="rc-metric"><div class="rm-val" style="color:#e6edf3">'+(d.reductionPct||'—')+'</div><div class="rm-lbl">Reduction %</div></div>';
+        html += '</div>';
+        html += '<div class="rc-tools">';
+        html += '<div class="rc-tool-box"><div class="rtb-lbl">Solutioned tools</div><div class="rtb-val">'+(d.solTools||'—')+'</div></div>';
+        html += '<div class="rc-tool-box"><div class="rtb-lbl">Current tools</div><div class="rtb-val">'+(d.curTools||'—')+'</div></div>';
+        html += '</div>';
+        if (d.footer) html += '<div class="rc-footer">'+d.footer+'</div>';
+        html += '</div>';
+      } else {
+        html += '<div class="'+cardCls+'" id="rc-'+c.id+'-card" data-client-id="'+c.id+'" data-client-name="'+c.name+'">';
+        html += '<div class="rc-hdr"><span class="rc-name" style="color:'+ncol+'">'+c.name+'</span><span class="rc-start">—</span></div>';
+        html += '<div style="padding:20px 14px;text-align:center;font-size:11px;color:#6e7681">Data pending</div>';
+        html += '</div>';
+      }
+    });
+    html += '</div>'; // close rc-grid
+
+    // ── Expand panels — OUTSIDE the grid, one per client, hidden by default ──
+    clients.forEach(function(c) {
+      var d = CLIENT_RC[c.id] || {};
+      var hasExpand = d.solDeploy || d.solRun || d.curDeploy || d.curRun || d.variance || d.remarks;
+      if (!hasExpand) return;
+      html += '<div class="rc-expand" id="rc-'+c.id+'-detail">';
+      html += '<div style="font-size:12px;font-weight:700;color:#a78bfa;margin-bottom:12px">'+c.name+' — Cost Details</div>';
+      html += '<div class="rc-expand-grid">';
+      html += '<div class="rc-expand-metric"><div class="ev" style="color:#e6edf3">'+(d.solDeploy||'—')+'</div><div class="el">Sol. Deploy Cost</div></div>';
+      html += '<div class="rc-expand-metric"><div class="ev" style="color:#e6edf3">'+(d.solRun||'—')+'</div><div class="el">Sol. Run Cost</div></div>';
+      html += '<div class="rc-expand-metric"><div class="ev" style="color:#e6edf3">'+(d.curDeploy||'—')+'</div><div class="el">Cur. Deploy Cost</div></div>';
+      html += '<div class="rc-expand-metric"><div class="ev" style="color:#e6edf3">'+(d.curRun||'—')+'</div><div class="el">Cur. Run Cost</div></div>';
+      if (d.variance && d.variance !== '—') {
+        html += '<div class="rc-expand-metric" style="grid-column:span 2"><div class="ev" style="color:#4ade80">'+d.variance+'</div><div class="el">Cost Variance</div></div>';
+      }
+      if (d.remarks && d.remarks !== '—') {
+        var span = (d.variance && d.variance !== '—') ? '2' : '4';
+        html += '<div class="rc-expand-metric" style="grid-column:span '+span+'"><div class="ev" style="color:#8b949e;font-size:12px;font-weight:400">'+d.remarks+'</div><div class="el">Remarks</div></div>';
+      }
+      html += '</div></div>';
+    });
+  });
+  wrap.innerHTML = html;
+}
+
+function buildClientMgmtRows() {
+  var list = document.getElementById('client-mgmt-list');
+  if (!list) return;
+  list.innerHTML = '';
+  var regions = getRegions();
+  regions.forEach(function(region) {
+    var rcol = REGION_COLOR[region] || '#8b949e';
+    var lbl = document.createElement('div');
+    lbl.style.cssText = 'font-size:10px;font-weight:700;letter-spacing:.08em;text-transform:uppercase;color:'+rcol+';margin:10px 0 6px;display:flex;align-items:center;gap:5px';
+    lbl.textContent = REGION_EMOJI[region] + ' ' + REGION_LABEL[region];
+    list.appendChild(lbl);
+    CLIENTS.forEach(function(c, i) {
+      if (c.region !== region) return;
+      var row = document.createElement('div');
+      row.style.cssText = 'display:grid;grid-template-columns:1fr auto auto;gap:6px;margin-bottom:6px;align-items:center';
+      row.innerHTML =
+        '<input id="cm-name-'+i+'" value="'+c.name+'" style="background:#0d1117;border:1px solid #30363d;border-radius:8px;color:#e6edf3;font-size:13px;padding:8px 12px;outline:none;width:100%">' +
+        '<select id="cm-reg-'+i+'" style="background:#0d1117;border:1px solid #30363d;border-radius:8px;color:#e6edf3;font-size:12px;padding:8px 10px;width:160px;cursor:pointer">' +
+          '<option value="americas"'+(c.region==='americas'?' selected':'')+'>🌎 Americas</option>' +
+          '<option value="europe"'+(c.region==='europe'?' selected':'')+'>🌍 Europe</option>' +
+        '</select>' +
+        '<button onclick="removeClientRow('+i+')" style="background:rgba(248,113,113,0.12);border:1px solid rgba(248,113,113,0.35);color:#f87171;border-radius:8px;width:32px;height:34px;cursor:pointer;font-size:14px;display:flex;align-items:center;justify-content:center">✕</button>';
+      list.appendChild(row);
+    });
+  });
+}
+
+function addClientRow() {
+  var newId = 'client-' + Date.now();
+  CLIENTS.push({ id: newId, name:'New Client', region:'americas' });
+  buildClientMgmtRows();
+}
+
+function removeClientRow(i) {
+  CLIENTS.splice(i, 1);
+  buildClientMgmtRows();
+}
+
+function saveClientMgmt() {
+  var newClients = [];
+  var i = 0;
+  while (document.getElementById('cm-name-'+i)) {
+    var name = document.getElementById('cm-name-'+i).value.trim();
+    var reg  = document.getElementById('cm-reg-'+i).value;
+    var existingId = CLIENTS[i] ? CLIENTS[i].id : ('client-' + Date.now() + i);
+    if (name) newClients.push({ id: existingId, name: name, region: reg });
+    i++;
+  }
+  CLIENTS = newClients;
+}
+
+var EDITOR_PWD = 'AAI@2026';
+
+function openEditor() {
+  promptPwd();
+}
+
+function promptPwd() {
+  var m = document.createElement('div');
+  m.id = 'pass-modal';
+  m.style.cssText = 'position:fixed;inset:0;background:rgba(0,0,0,0.85);z-index:2000;display:flex;align-items:center;justify-content:center;backdrop-filter:blur(6px)';
+  m.innerHTML =
+    '<div style="background:#161b22;border:1px solid rgba(255,255,255,0.2);border-radius:18px;padding:32px;width:360px;max-width:95vw">' +
+      '<h3 style="font-size:16px;font-weight:800;color:#fff;margin-bottom:6px">&#x1F512; Editor Access</h3>' +
+      '<p style="font-size:11px;color:#8b949e;margin-bottom:18px;letter-spacing:1px;text-transform:uppercase">Enter password to update dashboard</p>' +
+      '<input type="password" id="pass-input" placeholder="&#x2022;&#x2022;&#x2022;&#x2022;&#x2022;&#x2022;&#x2022;&#x2022;" maxlength="20"' +
+        ' style="width:100%;background:#0a0d18;border:1.5px solid rgba(255,255,255,0.12);border-radius:8px;color:#fff;font-size:14px;padding:10px 14px;outline:none;margin-bottom:8px">' +
+      '<div id="pass-err" style="font-size:11px;color:#f87171;min-height:16px;margin-bottom:10px"></div>' +
+      '<div style="display:flex;gap:8px;justify-content:flex-end">' +
+        '<button onclick="closePwd()" style="background:transparent;border:1px solid rgba(255,255,255,0.12);border-radius:8px;padding:9px 18px;color:#8b949e;cursor:pointer;font-size:12px">Cancel</button>' +
+        '<button onclick="checkPwd()" style="background:rgba(167,139,250,0.2);border:1px solid rgba(167,139,250,0.5);border-radius:8px;padding:9px 18px;color:#a78bfa;cursor:pointer;font-size:12px;font-weight:700">Unlock &#x21B5;</button>' +
+      '</div>' +
+    '</div>';
+  document.body.appendChild(m);
+  setTimeout(function(){ var inp = document.getElementById('pass-input'); if(inp) inp.focus(); }, 100);
+  document.getElementById('pass-input').addEventListener('keydown', function(e){
+    if (e.key === 'Enter') checkPwd();
+    if (e.key === 'Escape') closePwd();
+  });
+  m.addEventListener('click', function(e){ if (e.target === m) closePwd(); });
+}
+function closePwd() {
+  var m = document.getElementById('pass-modal');
+  if (m) m.remove();
+}
+
+function checkPwd() {
+  var v = document.getElementById('pass-input').value;
+  if (v === EDITOR_PWD) {
+    closePwd();
+    showEditorModal();
+  } else {
+    document.getElementById('pass-err').textContent = '✕ Incorrect password. Try again.';
+    document.getElementById('pass-input').value = '';
+    document.getElementById('pass-input').focus();
+  }
+}
+
+function showEditorModal() {
+  if (document.getElementById('editor-modal')) return;
+  saveMilestoneStatuses();
+
+  var STATUS_OPTS = ['Completed','In Progress','Yet to Start','In Prog-Delayed'];
+
+  // Region-grouped client order — matches dashboard
+  var editorRegions = getRegions();
+  var editorRegionGroups = editorRegions.map(function(r){
+    return { region:r, clients: CLIENTS.filter(function(c){ return c.region===r; }) };
+  });
+  var orderedClients = [];
+  editorRegionGroups.forEach(function(g){ g.clients.forEach(function(c){ orderedClients.push(c); }); });
+  var clients = orderedClients.map(function(c){ return c.name; });
+
+  // Read milestone statuses in grouped order
+  var msData = [];
+  var STATUS_LABEL = {'s-completed':'Completed','s-inprog':'In Progress','s-delayed':'In Prog-Delayed','s-yet':'Yet to Start','s-ontrack':'Completed'};
+  MILESTONES.forEach(function(ph) {
+    ph.rows.forEach(function(ms) {
+      var statuses = orderedClients.map(function(c) {
+        var cls = MS_STATUS[c.name + '||' + ms.name] || 's-yet';
+        return STATUS_LABEL[cls] || 'Yet to Start';
+      });
+      msData.push({ name: ms.name, statuses: statuses });
+    });
+  });
+
+  // Read KPIs — values AND labels live from DOM
+  var kpiEls = document.querySelectorAll('.ab-kpi .v');
+  var kpiVals = Array.from(kpiEls).map(function(el){ return el.textContent.trim(); });
+  var kpiLabelsLive = [0,1,2,3,4].map(function(i){ var el=document.getElementById('kpi-l-'+i); return el?el.textContent.trim():''; });
+
+  // Read exec summary
+  var execDisplay = document.getElementById('exec-display');
+  var execTexts = execDisplay
+    ? Array.from(execDisplay.querySelectorAll('.ls-item')).map(function(li) {
+        var span = li.querySelectorAll('span')[1];
+        return span ? span.textContent.trim() : '';
+      }).filter(function(t){ return t.length > 0; })
+    : [];
+
+  // Read RAID
+  var raidDisplay = document.getElementById('raid-display');
+  var raidTexts = raidDisplay
+    ? Array.from(raidDisplay.querySelectorAll('.ls-item')).map(function(li) {
+        var badge = li.querySelector('.ls-bullet') ? li.querySelector('.ls-bullet').textContent.trim() : '';
+        var text  = li.querySelectorAll('span')[1] ? li.querySelectorAll('span')[1].textContent.trim() : '';
+        return (badge && badge !== '!') ? '(' + badge + ') ' + text : text;
+      })
+    : [];
+
+  // Read actions
+  var actDisplay = document.getElementById('actions-display');
+  var actionTexts = actDisplay
+    ? Array.from(actDisplay.querySelectorAll('.ls-item')).map(function(li) {
+        var span = li.querySelectorAll('span')[1];
+        return span ? span.textContent.trim() : '';
+      }).filter(function(t){ return t.length > 0; })
+    : [];
+
+  // Wave 1 data
+  var rowData = [
+    {proc:'Incident management', vals:['1','5','24','30','14','7']},
+    {proc:'Change management',   vals:['1','8','15','26','0','7']},
+    {proc:'Knowledge management',vals:['1','6','13','24','0','9']}
+  ];
+  document.querySelectorAll('#wave1-ribbon [contenteditable]').forEach(function(el,i){
+    var row = Math.floor(i/6); var col = i%6;
+    if(rowData[row]) rowData[row].vals[col] = el.textContent.trim();
+  });
+  var cols = [0,1,2,3,4,5].map(function(i){
+    var el = document.querySelector('.w1-col-lbl[data-col="'+i+'"]');
+    return el ? el.textContent.trim() : ['Orchestrator','Super','Utility','Total','Completed','In Progress'][i];
+  });
+
+  var m = document.createElement('div');
+  m.id = 'editor-modal';
+  m.style.cssText = 'position:fixed;inset:0;background:rgba(0,0,0,0.75);z-index:1000;overflow-y:auto;padding:24px';
+
+  // Build milestone rows HTML
+  var msHtml = '';
+  msData.forEach(function(row, ri) {
+    var cells = clients.map(function(cl, ci) {
+      var curStatus = row.statuses[ci] || 'Yet to Start';
+      var opts = STATUS_OPTS.map(function(s){
+        return '<option' + (s === curStatus ? ' selected' : '') + '>' + s + '</option>';
+      }).join('');
+      return '<td style="padding:4px"><select data-ms="' + ri + '" data-cl="' + ci + '" style="background:#0d1117;border:1px solid #30363d;color:#e6edf3;border-radius:4px;padding:3px 5px;font-size:10px;width:100%">' + opts + '</select></td>';
+    }).join('');
+    msHtml += '<tr><td style="padding:4px 8px;font-size:11px;color:#8b949e;white-space:nowrap">' + row.name + '</td>' + cells + '</tr>';
+  });
+
+  // Build wave1 rows HTML
+  var wave1Html = rowData.map(function(row, ri) {
+    var vcells = row.vals.map(function(v, ci) {
+      return '<td style="padding:4px"><input data-w1="' + ri + '" data-col="' + ci + '" value="' + v + '" style="background:#0d1117;border:1px solid #30363d;color:#e6edf3;border-radius:4px;padding:3px 6px;font-size:11px;width:52px;text-align:center"></td>';
+    }).join('');
+    return '<tr><td style="padding:4px 8px;font-size:11px;color:#a78bfa;font-weight:600">' + row.proc + '</td>' + vcells + '</tr>';
+  }).join('');
+
+  // Build KPI inputs — value + label both editable
+  var kpiHtml = kpiLabelsLive.map(function(lbl, i) {
+    return '<div style="background:#0d1117;border:1px solid #21262d;border-radius:8px;padding:10px">' +
+      '<input id="kpi-' + i + '" value="' + (kpiVals[i]||'') + '" style="background:none;border:none;color:#a78bfa;font-size:22px;font-weight:800;width:100%;outline:none;margin-bottom:6px">' +
+      '<div style="border-top:1px solid #21262d;padding-top:6px;margin-top:2px">' +
+      '<div style="font-size:9px;color:#6e7681;margin-bottom:3px;text-transform:uppercase;letter-spacing:.05em">Label</div>' +
+      '<input id="kpi-l-edit-' + i + '" value="' + lbl + '" placeholder="Label text" style="background:#161b22;border:1px solid #30363d;border-radius:4px;color:#c9d1d9;font-size:11px;padding:4px 6px;width:100%;outline:none">' +
+      '</div></div>';
+  }).join('');
+
+  // Build Wave 1 column label editor
+  var w1ColLabelHtml = '<div style="background:#0d1117;border:1px solid #21262d;border-radius:8px;padding:10px;margin-bottom:8px">' +
+    '<div style="font-size:9px;color:#6e7681;text-transform:uppercase;letter-spacing:.05em;margin-bottom:8px">Column Labels</div>' +
+    '<div style="display:grid;grid-template-columns:160px repeat(6,1fr);gap:6px;align-items:center">' +
+    '<div style="font-size:10px;color:#6e7681">Process (read-only)</div>' +
+    cols.map(function(c, i){
+      return '<input id="w1-col-edit-'+i+'" value="'+c+'" style="background:#161b22;border:1px solid #30363d;border-radius:4px;color:#c9d1d9;font-size:11px;padding:4px 6px;width:100%;outline:none;text-align:center">';
+    }).join('') +
+    '</div></div>';
+
+  // Build milestone table headers: region group row + client name row
+  var msRegionHeaders = '<tr><th style="padding:6px 8px;font-size:10px;color:#6e7681;text-align:left">Milestone</th>';
+  editorRegionGroups.forEach(function(g){
+    var col = REGION_COLOR[g.region] || '#6e7681';
+    msRegionHeaders += '<th colspan="'+g.clients.length+'" style="padding:6px;font-size:10px;color:'+col+';text-align:center;font-weight:800;letter-spacing:1px">'+REGION_EMOJI[g.region]+' '+REGION_LABEL[g.region]+'</th>';
+  });
+  msRegionHeaders += '</tr>';
+  var msClientHeadersRow = '<tr><th></th>';
+  orderedClients.forEach(function(c){
+    var col = REGION_COLOR[c.region] || '#6e7681';
+    msClientHeadersRow += '<th style="padding:6px;font-size:10px;color:'+col+';text-align:center;font-weight:800">'+c.name+'</th>';
+  });
+  msClientHeadersRow += '</tr>';
+
+  var html = '<div style="max-width:960px;margin:0 auto;background:#161b22;border:1px solid #30363d;border-radius:16px;padding:28px">';
+  html += '<div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:24px">';
+  html += '<div style="font-size:17px;font-weight:700;color:#fff">&#x270E; Update Dashboard Data</div>';
+  html += '<button onclick="closeEditor()" style="background:none;border:none;color:#8b949e;font-size:20px;cursor:pointer">&#x2715;</button>';
+  html += '</div>';
+
+  // CLIENT MANAGEMENT
+  html += '<div style="margin-bottom:24px;padding-bottom:20px;border-bottom:1px solid #21262d">';
+  html += '<div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:14px">';
+  html += '<div style="font-size:12px;font-weight:700;color:#ffd966;text-transform:uppercase;letter-spacing:.08em">CLIENT MANAGEMENT</div>';
+  html += '<button onclick="addClientRow()" style="background:rgba(0,201,141,0.12);border:1px solid rgba(0,201,141,0.35);color:#4ade80;border-radius:8px;padding:6px 14px;font-size:12px;font-weight:700;cursor:pointer">+ Add Client</button>';
+  html += '</div>';
+  html += '<div style="display:grid;grid-template-columns:1fr auto auto;gap:6px;margin-bottom:6px">';
+  html += '<div style="font-size:9px;font-weight:700;color:#6e7681;text-transform:uppercase;letter-spacing:.06em">CLIENT NAME</div>';
+  html += '<div style="font-size:9px;font-weight:700;color:#6e7681;text-transform:uppercase;letter-spacing:.06em;width:160px">REGION</div>';
+  html += '<div style="width:32px"></div>';
+  html += '</div>';
+  html += '<div id="client-mgmt-list"></div>';
+  html += '<div style="font-size:10px;color:#6e7681;margin-top:10px">&#9888; Adding, removing or renaming a client updates: Deployment Status, Client Snapshot, Milestones &amp; Resource sections.</div>';
+  html += '</div>';
+
+  // FRAMEWORK KPIs
+  html += '<div style="font-size:12px;font-weight:600;color:#8b949e;text-transform:uppercase;letter-spacing:.06em;margin-bottom:10px">Framework KPIs</div>';
+  html += '<div style="display:grid;grid-template-columns:repeat(5,1fr);gap:8px;margin-bottom:20px">' + kpiHtml + '</div>';
+
+  html += '<div style="font-size:12px;font-weight:600;color:#8b949e;text-transform:uppercase;letter-spacing:.06em;margin-bottom:10px">Wave 1 &#8212; Agent Breakdown</div>';
+  html += w1ColLabelHtml;
+  html += '<div style="background:#0d1117;border-radius:8px;overflow:auto;margin-bottom:20px">';
+  html += '<table style="width:100%;border-collapse:collapse">';
+  html += '<thead><tr><th style="padding:8px;font-size:10px;color:#6e7681;text-align:left">Process</th>';
+  html += cols.map(function(c){ return '<th style="padding:8px;font-size:10px;color:#6e7681;text-align:center">' + c + '</th>'; }).join('');
+  html += '</tr></thead><tbody>' + wave1Html + '</tbody></table></div>';
+
+  // MILESTONE STATUS
+  html += '<div style="font-size:12px;font-weight:600;color:#8b949e;text-transform:uppercase;letter-spacing:.06em;margin-bottom:10px">Milestone Status</div>';
+  html += '<div style="background:#0d1117;border-radius:8px;overflow:auto;margin-bottom:20px">';
+  html += '<table style="width:100%;border-collapse:collapse">';
+  html += '<thead>' + msRegionHeaders + msClientHeadersRow + '</thead>';
+  html += '<tbody>' + msHtml + '</tbody></table></div>';
+
+  // EXECUTIVE SUMMARY
+  html += '<div style="font-size:12px;font-weight:600;color:#8b949e;text-transform:uppercase;letter-spacing:.06em;margin-bottom:6px">Executive Summary</div>';
+  html += '<div style="font-size:10px;color:#6e7681;margin-bottom:5px">(one bullet per line)</div>';
+  html += '<textarea id="exec-all" style="width:100%;background:#0d1117;border:1px solid #21262d;border-radius:8px;color:#c9d1d9;font-size:13px;padding:10px;resize:vertical;min-height:90px;font-family:Inter,sans-serif;line-height:1.6;margin-bottom:14px">' + execTexts.join('\n') + '</textarea>';
+
+  html += '<div style="display:grid;grid-template-columns:1fr 1fr;gap:12px;margin-bottom:14px">';
+  html += '<div>';
+  html += '<div style="font-size:10px;color:#6e7681;margin-bottom:5px;font-weight:600;text-transform:uppercase">RAID (one per line, start with (R)(A)(I)(D))</div>';
+  html += '<textarea id="raid-all" style="width:100%;background:#0d1117;border:1px solid #21262d;border-radius:8px;color:#c9d1d9;font-size:13px;padding:10px;resize:vertical;min-height:100px;font-family:Inter,sans-serif;line-height:1.6" placeholder="(D) Knowledge to be updated">' + raidTexts.join('\n') + '</textarea>';
+  html += '</div>';
+  html += '<div>';
+  html += '<div style="font-size:10px;color:#6e7681;margin-bottom:5px;font-weight:600;text-transform:uppercase">Recommended Actions (one per line)</div>';
+  html += '<textarea id="actions-all" style="width:100%;background:#0d1117;border:1px solid #21262d;border-radius:8px;color:#c9d1d9;font-size:13px;padding:10px;resize:vertical;min-height:100px;font-family:Inter,sans-serif;line-height:1.6">' + actionTexts.join('\n') + '</textarea>';
+  html += '</div>';
+  html += '</div>';
+
+  html += '<div style="margin-bottom:24px;padding-bottom:20px;border-bottom:1px solid #21262d">';
+  html += '<div style="font-size:12px;font-weight:700;color:#60a5fa;text-transform:uppercase;letter-spacing:.08em;margin-bottom:4px">Client Deployment Status</div>';
+  html += '<div style="font-size:10px;color:#6e7681;margin-bottom:14px">Enter agent names one per line. Status colour is automatic.</div>';
+
+  // Table header
+  html += '<div style="display:grid;grid-template-columns:140px 60px 1fr 1fr;gap:8px;margin-bottom:6px;padding:0 4px">';
+  html += '<div style="font-size:9px;color:#6e7681;text-transform:uppercase;letter-spacing:.06em">Client</div>';
+  html += '<div style="font-size:9px;color:#6e7681;text-transform:uppercase;letter-spacing:.06em">Count</div>';
+  html += '<div style="font-size:9px;color:#6e7681;text-transform:uppercase;letter-spacing:.06em">Deployed Agents (one per line)</div>';
+  html += '<div style="font-size:9px;color:#6e7681;text-transform:uppercase;letter-spacing:.06em">Status Note</div>';
+  html += '</div>';
+
+  editorRegionGroups.forEach(function(g) {
+    var rcol = REGION_COLOR[g.region] || '#8b949e';
+    html += '<div style="font-size:10px;font-weight:700;letter-spacing:.08em;text-transform:uppercase;color:'+rcol+';margin:10px 0 8px;display:flex;align-items:center;gap:6px">'+REGION_EMOJI[g.region]+' '+REGION_LABEL[g.region]+'</div>';
+    g.clients.forEach(function(c) {
+      var d = CLIENT_DEPLOY[c.id] || { count:0, agents:[], note:'' };
+      var ncol = REGION_COLOR[c.region] || '#e6edf3';
+      var agentNames = (d.agents||[]).map(function(a){ return a.name; }).join('\n');
+      html += '<div style="display:grid;grid-template-columns:140px 60px 1fr 1fr;gap:8px;margin-bottom:8px;align-items:start;background:#0d1117;border:1px solid #21262d;border-radius:8px;padding:10px">';
+      html += '<div style="font-size:12px;font-weight:700;color:'+ncol+';padding-top:4px">'+c.name+'</div>';
+      html += '<input id="cd-count-'+c.id+'" type="number" min="0" value="'+d.count+'" style="background:#161b22;border:1px solid #30363d;border-radius:6px;color:#a78bfa;font-size:18px;font-weight:800;padding:4px 8px;outline:none;text-align:center;width:100%">';
+      html += '<textarea id="cd-agents-'+c.id+'" rows="3" placeholder="Agent name 1&#10;Agent name 2" style="background:#161b22;border:1px solid #30363d;border-radius:6px;color:#c9d1d9;font-size:12px;padding:6px 8px;outline:none;resize:vertical;font-family:Inter,sans-serif;width:100%">'+agentNames+'</textarea>';
+      html += '<input id="cd-note-'+c.id+'" value="'+(d.note||'')+'" placeholder="e.g. Deployment readiness in progress" style="background:#161b22;border:1px solid #30363d;border-radius:6px;color:#c9d1d9;font-size:12px;padding:6px 8px;outline:none;width:100%;margin-top:2px">';
+      html += '</div>';
+    });
+  });
+  html += '</div>';
+
+  // RESOURCE, COST & TOOLS EDITOR
+  html += '<div style="margin-bottom:24px;padding-bottom:20px;border-bottom:1px solid #21262d">';
+  html += '<div style="font-size:12px;font-weight:700;color:#a78bfa;text-transform:uppercase;letter-spacing:.08em;margin-bottom:14px">Resource, Cost &amp; Tools Overview</div>';
+  html += '<div style="background:#0d1117;border:1px solid #21262d;border-radius:10px;padding:14px 16px;margin-bottom:14px">';
+  html += '<div style="font-size:11px;font-weight:700;color:#6e7681;text-transform:uppercase;letter-spacing:.07em;margin-bottom:10px">Inventory Links</div>';
+  html += '<div style="display:grid;grid-template-columns:1fr 2fr;gap:8px;margin-bottom:10px">';
+  html += '<div><div style="font-size:9px;color:#6e7681;margin-bottom:3px;text-transform:uppercase;letter-spacing:.05em">Asset Inventory — Display Text</div><input id="lnk-asset-text" value="'+LINKS.assetText+'" placeholder="Asset Inventory" style="width:100%;background:#161b22;border:1px solid #30363d;border-radius:6px;color:#60a5fa;font-size:12px;padding:6px 8px;outline:none"></div>';
+  html += '<div><div style="font-size:9px;color:#6e7681;margin-bottom:3px;text-transform:uppercase;letter-spacing:.05em">Asset Inventory — URL</div><input id="lnk-asset-url" value="'+LINKS.assetUrl+'" placeholder="https://..." style="width:100%;background:#161b22;border:1px solid #30363d;border-radius:6px;color:#c9d1d9;font-size:12px;padding:6px 8px;outline:none"></div>';
+  html += '</div><div style="display:grid;grid-template-columns:1fr 2fr;gap:8px">';
+  html += '<div><div style="font-size:9px;color:#6e7681;margin-bottom:3px;text-transform:uppercase;letter-spacing:.05em">Agent Catalogue — Display Text</div><input id="lnk-agent-text" value="'+LINKS.agentText+'" placeholder="Agent Catalogue" style="width:100%;background:#161b22;border:1px solid #30363d;border-radius:6px;color:#60a5fa;font-size:12px;padding:6px 8px;outline:none"></div>';
+  html += '<div><div style="font-size:9px;color:#6e7681;margin-bottom:3px;text-transform:uppercase;letter-spacing:.05em">Agent Catalogue — URL</div><input id="lnk-agent-url" value="'+LINKS.agentUrl+'" placeholder="https://..." style="width:100%;background:#161b22;border:1px solid #30363d;border-radius:6px;color:#c9d1d9;font-size:12px;padding:6px 8px;outline:none"></div>';
+  html += '</div></div>';
+  editorRegionGroups.forEach(function(g) {
+    var rcol = REGION_COLOR[g.region] || '#8b949e';
+    html += '<div style="font-size:10px;font-weight:700;letter-spacing:.08em;text-transform:uppercase;color:'+rcol+';margin:12px 0 8px;display:flex;align-items:center;gap:6px">'+REGION_EMOJI[g.region]+' '+REGION_LABEL[g.region]+'</div>';
+    g.clients.forEach(function(c) {
+      var d = CLIENT_RC[c.id] || {};
+      var ncol = REGION_COLOR[c.region] || '#e6edf3';
+      html += '<div style="background:#0d1117;border:1px solid #21262d;border-radius:10px;padding:14px 16px;margin-bottom:10px">';
+      html += '<div style="font-size:12px;font-weight:700;color:'+ncol+';margin-bottom:12px">'+c.name+'</div>';
+      html += '<div style="display:grid;grid-template-columns:repeat(5,1fr);gap:8px;margin-bottom:8px">';
+      [{id:'since',label:'Since',val:d.since||''},{id:'solHC',label:'Sol. HC Y1M1',val:d.solHC||''},{id:'actualHC',label:'Actual HC',val:d.actualHC||''},{id:'hcReduction',label:'HC Reduction',val:d.hcReduction||''},{id:'reductionPct',label:'Reduction %',val:d.reductionPct||''}].forEach(function(f){
+        html += '<div><div style="font-size:9px;color:#6e7681;margin-bottom:3px;text-transform:uppercase;letter-spacing:.05em">'+f.label+'</div><input id="rc-'+c.id+'-'+f.id+'" value="'+f.val+'" style="width:100%;background:#161b22;border:1px solid #30363d;border-radius:6px;color:#e6edf3;font-size:12px;padding:6px 8px;outline:none"></div>';
+      });
+      html += '</div><div style="display:grid;grid-template-columns:1fr 1fr;gap:8px;margin-bottom:8px">';
+      html += '<div><div style="font-size:9px;color:#6e7681;margin-bottom:3px;text-transform:uppercase;letter-spacing:.05em">Solutioned Tools</div><textarea id="rc-'+c.id+'-solTools" rows="2" style="width:100%;background:#161b22;border:1px solid #30363d;border-radius:6px;color:#c9d1d9;font-size:12px;padding:6px 8px;outline:none;resize:vertical;font-family:Inter,sans-serif">'+((d.solTools)||'')+'</textarea></div>';
+      html += '<div><div style="font-size:9px;color:#6e7681;margin-bottom:3px;text-transform:uppercase;letter-spacing:.05em">Current Tools</div><textarea id="rc-'+c.id+'-curTools" rows="2" style="width:100%;background:#161b22;border:1px solid #30363d;border-radius:6px;color:#c9d1d9;font-size:12px;padding:6px 8px;outline:none;resize:vertical;font-family:Inter,sans-serif">'+((d.curTools)||'')+'</textarea></div>';
+      html += '</div><div style="display:grid;grid-template-columns:repeat(4,1fr);gap:8px;margin-bottom:8px">';
+      [{id:'solDeploy',label:'Sol. Deploy Cost',val:d.solDeploy||''},{id:'solRun',label:'Sol. Run Cost',val:d.solRun||''},{id:'curDeploy',label:'Cur. Deploy Cost',val:d.curDeploy||''},{id:'curRun',label:'Cur. Run Cost',val:d.curRun||''}].forEach(function(f){
+        html += '<div><div style="font-size:9px;color:#6e7681;margin-bottom:3px;text-transform:uppercase;letter-spacing:.05em">'+f.label+'</div><input id="rc-'+c.id+'-'+f.id+'" value="'+f.val+'" style="width:100%;background:#161b22;border:1px solid #30363d;border-radius:6px;color:#e6edf3;font-size:12px;padding:6px 8px;outline:none"></div>';
+      });
+      html += '</div><div style="display:grid;grid-template-columns:1fr 2fr 2fr;gap:8px">';
+      html += '<div><div style="font-size:9px;color:#6e7681;margin-bottom:3px;text-transform:uppercase;letter-spacing:.05em">Cost Variance</div><input id="rc-'+c.id+'-variance" value="'+(d.variance||'')+'" style="width:100%;background:#161b22;border:1px solid #30363d;border-radius:6px;color:#4ade80;font-size:12px;padding:6px 8px;outline:none"></div>';
+      html += '<div><div style="font-size:9px;color:#6e7681;margin-bottom:3px;text-transform:uppercase;letter-spacing:.05em">Remarks</div><textarea id="rc-'+c.id+'-remarks" rows="2" style="width:100%;background:#161b22;border:1px solid #30363d;border-radius:6px;color:#8b949e;font-size:12px;padding:6px 8px;outline:none;resize:vertical;font-family:Inter,sans-serif">'+((d.remarks)||'')+'</textarea></div>';
+      html += '<div><div style="font-size:9px;color:#6e7681;margin-bottom:3px;text-transform:uppercase;letter-spacing:.05em">Footer / Contract Note</div><textarea id="rc-'+c.id+'-footer" rows="2" style="width:100%;background:#161b22;border:1px solid #30363d;border-radius:6px;color:#8b949e;font-size:12px;padding:6px 8px;outline:none;resize:vertical;font-family:Inter,sans-serif">'+((d.footer)||'')+'</textarea></div>';
+      html += '</div></div>';
+    });
+  });
+  html += '</div>';
+
+  // SAVE / CANCEL
+  html += '<div style="display:flex;gap:10px;justify-content:flex-end;padding-top:16px;border-top:1px solid #21262d">';
+  html += '<button onclick="closeEditor()" style="background:none;border:1px solid #30363d;border-radius:8px;padding:10px 20px;color:#8b949e;cursor:pointer;font-size:13px">Cancel</button>';
+  html += '<button onclick="applyEdits()" style="background:#a78bfa;border:none;border-radius:8px;padding:10px 24px;color:#fff;cursor:pointer;font-size:13px;font-weight:700">&#x2713; Save &amp; Update Dashboard</button>';
+  html += '</div>';
+  html += '</div>';
+
+  m.innerHTML = html;
+  document.body.appendChild(m);
+  buildClientMgmtRows();
+}
+
+
+function closeEditor() {
+  var m = document.getElementById('editor-modal');
+  if (m) m.remove();
+}
+
+const STATUS_CLASS = {
+  'Completed':'s-completed',
+  'In Progress':'s-inprog',
+  'Yet to Start':'s-yet',
+  'In Prog-Delayed':'s-delayed'
+};
+
+function applyEdits() {
+  // KPI values + labels
+  document.querySelectorAll('.ab-kpi .v').forEach(function(el,i){
+    var inp = document.getElementById('kpi-'+i);
+    if(inp) el.textContent = inp.value;
+  });
+  [0,1,2,3,4].forEach(function(i){
+    var lblInp = document.getElementById('kpi-l-edit-'+i);
+    var lblEl  = document.getElementById('kpi-l-'+i);
+    if(lblInp && lblEl) lblEl.textContent = lblInp.value;
+  });
+
+  // Wave 1 column labels — update ALL rows (data-col class on every row)
+  [0,1,2,3,4,5].forEach(function(i){
+    var colInp = document.getElementById('w1-col-edit-'+i);
+    if(!colInp) return;
+    document.querySelectorAll('.w1-col-lbl[data-col="'+i+'"]').forEach(function(el){
+      el.textContent = colInp.value;
+    });
+  });
+
+  // Wave 1 cell values — read editor inputs and write back to contenteditable cells
+  document.querySelectorAll('[data-w1]').forEach(function(inp) {
+    var ri  = parseInt(inp.dataset.w1);
+    var ci  = parseInt(inp.dataset.col);
+    var cells = document.querySelectorAll('#wave1-ribbon [contenteditable]');
+    var idx = ri * 6 + ci;
+    if (cells[idx]) cells[idx].textContent = inp.value;
+  });
+
+  // Milestones — use region-grouped order matching the editor columns
+  var applyRegions = getRegions();
+  var applyOrdered = [];
+  applyRegions.forEach(function(r){
+    CLIENTS.filter(function(c){ return c.region===r; }).forEach(function(c){ applyOrdered.push(c); });
+  });
+  var flatMilestones = [];
+  MILESTONES.forEach(function(ph){ ph.rows.forEach(function(ms){ flatMilestones.push(ms.name); }); });
+  document.querySelectorAll('[data-ms]').forEach(function(sel) {
+    var ri = parseInt(sel.dataset.ms);
+    var ci = parseInt(sel.dataset.cl);
+    var msName = flatMilestones[ri];
+    var cName  = applyOrdered[ci] ? applyOrdered[ci].name : '';
+    if (!msName || !cName) return;
+    MS_STATUS[cName + '||' + msName] = STATUS_CLASS[sel.value] || 's-yet';
+  });
+
+  // ── Executive Summary → each line = ls-item with ✅ bullet ──
+  const execTa = document.getElementById('exec-all');
+  const execDisplay = document.getElementById('exec-display');
+  if (execTa && execDisplay) {
+    const lines = execTa.value.split('\n').map(l => l.trim()).filter(l => l.length > 0);
+    execDisplay.innerHTML = lines.map(line =>
+      '<li class="ls-item"><span class="exec-bullet">✅</span><span>'+line+'</span></li>'
+    ).join('');
+  }
+
+  // ── RAID → blockers card, parse (R)/(A)/(I)/(D) prefix into badge ──
+  const raidTa = document.getElementById('raid-all');
+  const raidDisplay = document.getElementById('raid-display');
+  if (raidTa && raidDisplay) {
+    const lines = raidTa.value.split('\n').map(l => l.trim()).filter(l => l.length > 0);
+    raidDisplay.innerHTML = lines.map(line => {
+      const m = line.match(/^\(([RAID])\)\s*/i);
+      const badge = m ? m[1].toUpperCase() : '!';
+      const text  = m ? line.replace(/^\([RAID]\)\s*/i, '') : line;
+      return '<li class="ls-item"><span class="ls-bullet">'+badge+'</span><span>'+text+'</span></li>';
+    }).join('');
+  }
+
+  // ── Actions → actions card with ✓ bullet ──
+  const actionsTa = document.getElementById('actions-all');
+  const actDisplay = document.getElementById('actions-display');
+  if (actionsTa && actDisplay) {
+    const lines = actionsTa.value.split('\n').map(l => l.trim()).filter(l => l.length > 0);
+    actDisplay.innerHTML = lines.map(line =>
+      '<li class="ls-item"><span class="ls-bullet">✓</span><span>'+line+'</span></li>'
+    ).join('');
+  }
+
+  // ── Save Client Deployment data ──
+  CLIENTS.forEach(function(c) {
+    var countEl  = document.getElementById('cd-count-'+c.id);
+    var noteEl   = document.getElementById('cd-note-'+c.id);
+    var agentsEl = document.getElementById('cd-agents-'+c.id);
+    if (!countEl) return;
+    var agents = [];
+    if (agentsEl && agentsEl.value.trim()) {
+      agentsEl.value.split('\n').forEach(function(line) {
+        line = line.trim();
+        if (!line) return;
+        agents.push({ name: line, color: '#4ade80' });
+      });
+    }
+    CLIENT_DEPLOY[c.id] = {
+      count: parseInt(countEl.value) || 0,
+      agents: agents,
+      note:  noteEl ? noteEl.value.trim() : ''
+    };
+  });
+
+  // ── Save Resource, Cost & Tools data ──
+  CLIENTS.forEach(function(c) {
+    function rcVal(f){ var el=document.getElementById('rc-'+c.id+'-'+f); return el?el.value.trim():''; }
+    CLIENT_RC[c.id] = {
+      since:        rcVal('since'),
+      solHC:        rcVal('solHC'),
+      actualHC:     rcVal('actualHC'),
+      hcReduction:  rcVal('hcReduction'),
+      reductionPct: rcVal('reductionPct'),
+      solTools:     rcVal('solTools'),
+      curTools:     rcVal('curTools'),
+      footer:       rcVal('footer'),
+      solDeploy:    rcVal('solDeploy'),
+      solRun:       rcVal('solRun'),
+      curDeploy:    rcVal('curDeploy'),
+      curRun:       rcVal('curRun'),
+      variance:     rcVal('variance'),
+      remarks:      rcVal('remarks')
+    };
+  });
+
+  // ── Save Inventory Links ──
+  var lnkAssetText = document.getElementById('lnk-asset-text');
+  var lnkAssetUrl  = document.getElementById('lnk-asset-url');
+  var lnkAgentText = document.getElementById('lnk-agent-text');
+  var lnkAgentUrl  = document.getElementById('lnk-agent-url');
+  if (lnkAssetText) LINKS.assetText = lnkAssetText.value.trim();
+  if (lnkAssetUrl)  LINKS.assetUrl  = lnkAssetUrl.value.trim();
+  if (lnkAgentText) LINKS.agentText = lnkAgentText.value.trim();
+  if (lnkAgentUrl)  LINKS.agentUrl  = lnkAgentUrl.value.trim();
+  renderLinks();
+
+  // ── Save client list and re-render all sections ──
+  saveClientMgmt();
+  renderAllClientSections();
+
+  // Update timestamp
+  document.getElementById('hdr-date').textContent = 'Last updated: ' + new Date().toLocaleString();
+
+  closeEditor();
+}
+
+// ── Init: render all client sections now that all functions are defined ──
+loadPersistedState();
+renderAllClientSections();
+applyDeferredState();
+renderLinks();
+</script>
+
+
+</div></body></html>
